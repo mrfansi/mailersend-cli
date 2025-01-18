@@ -1,0 +1,81 @@
+[2025-01-18 12:24:17] development.ERROR: Target [App\Contracts\MailersendFactoryInterface] is not instantiable while building [App\Commands\Sender]. {"exception":"[object] (Illuminate\\Contracts\\Container\\BindingResolutionException(code: 0): Target [App\\Contracts\\MailersendFactoryInterface] is not instantiable while building [App\\Commands\\Sender]. at /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php:1201)
+[stacktrace]
+#0 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(953): Illuminate\\Container\\Container->notInstantiable('App\\\\Contracts\\\\M...')
+#1 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(819): Illuminate\\Container\\Container->build('App\\\\Contracts\\\\M...')
+#2 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Application.php(1025): Illuminate\\Container\\Container->resolve('App\\\\Contracts\\\\M...', Array, true)
+#3 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(755): Illuminate\\Foundation\\Application->resolve('App\\\\Contracts\\\\M...', Array)
+#4 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Application.php(1010): Illuminate\\Container\\Container->make('App\\\\Contracts\\\\M...', Array)
+#5 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(1118): Illuminate\\Foundation\\Application->make('App\\\\Contracts\\\\M...')
+#6 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(1028): Illuminate\\Container\\Container->resolveClass(Object(ReflectionParameter))
+#7 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(979): Illuminate\\Container\\Container->resolveDependencies(Array)
+#8 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(819): Illuminate\\Container\\Container->build('App\\\\Commands\\\\Se...')
+#9 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Application.php(1025): Illuminate\\Container\\Container->resolve('App\\\\Commands\\\\Se...', Array, true)
+#10 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(755): Illuminate\\Foundation\\Application->resolve('App\\\\Commands\\\\Se...', Array)
+#11 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Application.php(1010): Illuminate\\Container\\Container->make('App\\\\Commands\\\\Se...', Array)
+#12 /Users/mrfansi/Projects/mailersend/vendor/illuminate/console/Application.php(254): Illuminate\\Foundation\\Application->make('App\\\\Commands\\\\Se...')
+#13 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Console/Kernel.php(372): Illuminate\\Console\\Application->resolve('App\\\\Commands\\\\Se...')
+#14 /Users/mrfansi/Projects/mailersend/vendor/illuminate/console/Application.php(132): Illuminate\\Foundation\\Console\\Kernel->Illuminate\\Foundation\\Console\\{closure}(Object(Illuminate\\Console\\Application))
+#15 /Users/mrfansi/Projects/mailersend/vendor/illuminate/console/Application.php(79): Illuminate\\Console\\Application->bootstrap()
+#16 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Console/Kernel.php(536): Illuminate\\Console\\Application->__construct(Object(LaravelZero\\Framework\\Application), Object(Illuminate\\Events\\Dispatcher), 'unreleased')
+#17 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/framework/src/Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->getArtisan()
+#18 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/framework/src/Kernel.php(122): LaravelZero\\Framework\\Kernel->bootstrap()
+#19 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/framework/src/Kernel.php(109): LaravelZero\\Framework\\Kernel->ensureDefaultCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
+#20 /Users/mrfansi/Projects/mailersend/mailersend(35): LaravelZero\\Framework\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 {main}
+"} 
+[2025-01-18 12:26:20] development.ERROR: Target [App\Contracts\MailersendFactoryInterface] is not instantiable while building [App\Commands\Sender]. {"exception":"[object] (Illuminate\\Contracts\\Container\\BindingResolutionException(code: 0): Target [App\\Contracts\\MailersendFactoryInterface] is not instantiable while building [App\\Commands\\Sender]. at /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php:1201)
+[stacktrace]
+#0 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(953): Illuminate\\Container\\Container->notInstantiable('App\\\\Contracts\\\\M...')
+#1 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(819): Illuminate\\Container\\Container->build('App\\\\Contracts\\\\M...')
+#2 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Application.php(1025): Illuminate\\Container\\Container->resolve('App\\\\Contracts\\\\M...', Array, true)
+#3 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(755): Illuminate\\Foundation\\Application->resolve('App\\\\Contracts\\\\M...', Array)
+#4 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Application.php(1010): Illuminate\\Container\\Container->make('App\\\\Contracts\\\\M...', Array)
+#5 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(1118): Illuminate\\Foundation\\Application->make('App\\\\Contracts\\\\M...')
+#6 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(1028): Illuminate\\Container\\Container->resolveClass(Object(ReflectionParameter))
+#7 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(979): Illuminate\\Container\\Container->resolveDependencies(Array)
+#8 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(819): Illuminate\\Container\\Container->build('App\\\\Commands\\\\Se...')
+#9 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Application.php(1025): Illuminate\\Container\\Container->resolve('App\\\\Commands\\\\Se...', Array, true)
+#10 /Users/mrfansi/Projects/mailersend/vendor/illuminate/container/Container.php(755): Illuminate\\Foundation\\Application->resolve('App\\\\Commands\\\\Se...', Array)
+#11 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Application.php(1010): Illuminate\\Container\\Container->make('App\\\\Commands\\\\Se...', Array)
+#12 /Users/mrfansi/Projects/mailersend/vendor/illuminate/console/Application.php(254): Illuminate\\Foundation\\Application->make('App\\\\Commands\\\\Se...')
+#13 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Console/Kernel.php(372): Illuminate\\Console\\Application->resolve('App\\\\Commands\\\\Se...')
+#14 /Users/mrfansi/Projects/mailersend/vendor/illuminate/console/Application.php(132): Illuminate\\Foundation\\Console\\Kernel->Illuminate\\Foundation\\Console\\{closure}(Object(Illuminate\\Console\\Application))
+#15 /Users/mrfansi/Projects/mailersend/vendor/illuminate/console/Application.php(79): Illuminate\\Console\\Application->bootstrap()
+#16 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Console/Kernel.php(536): Illuminate\\Console\\Application->__construct(Object(LaravelZero\\Framework\\Application), Object(Illuminate\\Events\\Dispatcher), 'unreleased')
+#17 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/framework/src/Kernel.php(153): Illuminate\\Foundation\\Console\\Kernel->getArtisan()
+#18 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/framework/src/Kernel.php(122): LaravelZero\\Framework\\Kernel->bootstrap()
+#19 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/framework/src/Kernel.php(109): LaravelZero\\Framework\\Kernel->ensureDefaultCommand(Object(Symfony\\Component\\Console\\Input\\ArgvInput))
+#20 /Users/mrfansi/Projects/mailersend/mailersend(35): LaravelZero\\Framework\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 {main}
+"} 
+[2025-01-18 13:25:05] development.ERROR: Failed to find domain {"verified":51,"error":"Failed to retrieve domain details: {
+    \"message\": \"Resource not found.\"
+}"} 
+[2025-01-18 13:26:14] development.ERROR: Failed to find domain {"verified":51,"error":"Attempt to read property \"message\" on string"} 
+[2025-01-18 13:26:32] development.ERROR: Failed to find domain {"verified":51,"error":"Failed to retrieve domain details: Resource not found."} 
+[2025-01-18 13:27:27] development.ERROR: Failed to find domain {"verified":51,"error":"Failed to retrieve domain details with message \"Resource not found.\""} 
+[2025-01-18 13:27:57] development.ERROR: Failed to find domain {"verified":51,"error":"Resource not found."} 
+[2025-01-18 13:34:23] development.ERROR: Failed to find domain {"verified":"51ndgwvvjqqlzqx8","error":"Undefined array key \"id\""} 
+[2025-01-18 13:44:00] development.ERROR: Failed to retrieve domains {"limit":10,"page":0,"verified":true,"error":"App\\Data\\DomainResponse::__construct(): Argument #13 ($domain_settings) must be of type App\\Data\\DomainSettingData, array given, called in /Users/mrfansi/Projects/mailersend/app/Data/DomainResponse.php on line 64"} 
+[2025-01-18 13:44:26] development.ERROR: Failed to retrieve domains {"limit":10,"page":0,"verified":true,"error":"App\\Data\\DomainResponse::__construct(): Argument #13 ($domain_settings) must be of type App\\Data\\DomainSettingData, array given, called in /Users/mrfansi/Projects/mailersend/app/Data/DomainResponse.php on line 64"} 
+[2025-01-18 14:31:10] development.ERROR: Failed to create domain {"data":{"name":"testname.com","return_path_subdomain":"","custom_tracking_subdomain":"","inbound_routing_subdomain":""},"error":"Failed to create domain: {\"message\":\"The return path subdomain must only contain letters and numbers. (and 2 more errors)\",\"errors\":{\"return_path_subdomain\":[\"The return path subdomain must only contain letters and numbers.\"],\"custom_tracking_subdomain\":[\"The custom tracking subdomain must only contain letters and numbers.\"],\"inbound_routing_subdomain\":[\"The inbound routing subdomain must only contain letters and numbers.\"]}}"} 
+[2025-01-18 14:32:20] development.ERROR: Failed to create domain {"data":{"name":"testname.com","return_path_subdomain":"","custom_tracking_subdomain":"","inbound_routing_subdomain":""},"error":"Failed to create domain: {\"message\":\"The return path subdomain must only contain letters and numbers. (and 2 more errors)\",\"errors\":{\"return_path_subdomain\":[\"The return path subdomain must only contain letters and numbers.\"],\"custom_tracking_subdomain\":[\"The custom tracking subdomain must only contain letters and numbers.\"],\"inbound_routing_subdomain\":[\"The inbound routing subdomain must only contain letters and numbers.\"]}}"} 
+[2025-01-18 14:35:58] development.ERROR: Failed to create domain {"data":{"name":"testname.com","return_path_subdomain":null,"custom_tracking_subdomain":null,"inbound_routing_subdomain":null},"error":"Failed to create domain: {\"message\":\"The return path subdomain must only contain letters and numbers. (and 2 more errors)\",\"errors\":{\"return_path_subdomain\":[\"The return path subdomain must only contain letters and numbers.\"],\"custom_tracking_subdomain\":[\"The custom tracking subdomain must only contain letters and numbers.\"],\"inbound_routing_subdomain\":[\"The inbound routing subdomain must only contain letters and numbers.\"]}}"} 
+[2025-01-18 14:41:44] development.ERROR: Failed to create domain {"data":{"name":"testname.com","return_path_subdomain":"","custom_tracking_subdomain":"","inbound_routing_subdomain":""},"error":"Failed to create domain: {\"message\":\"The return path subdomain must only contain letters and numbers. (and 2 more errors)\",\"errors\":{\"return_path_subdomain\":[\"The return path subdomain must only contain letters and numbers.\"],\"custom_tracking_subdomain\":[\"The custom tracking subdomain must only contain letters and numbers.\"],\"inbound_routing_subdomain\":[\"The inbound routing subdomain must only contain letters and numbers.\"]}}"} 
+[2025-01-18 14:55:40] development.ERROR: Failed to create domain {"data":{"name":"testname.com","return_path_subdomain":null,"custom_tracking_subdomain":null,"inbound_routing_subdomain":null},"error":"Failed to create domain: {\"message\":\"The return path subdomain must only contain letters and numbers. (and 2 more errors)\",\"errors\":{\"return_path_subdomain\":[\"The return path subdomain must only contain letters and numbers.\"],\"custom_tracking_subdomain\":[\"The custom tracking subdomain must only contain letters and numbers.\"],\"inbound_routing_subdomain\":[\"The inbound routing subdomain must only contain letters and numbers.\"]}}"} 
+[2025-01-18 15:45:01] development.ERROR: Failed to create sender {"data":{"domain_id":"2p0347zzdo7lzdrn","email":"irfan@harisenin.com","name":"Muhammad Irfan","personal_note":null,"reply_to_name":null,"reply_to_email":null,"add_note":false},"error":"Undefined array key \"id\""} 
+[2025-01-18 15:45:13] development.ERROR: Failed to retrieve senders {"limit":10,"page":0,"domain_id":"","error":"Undefined array key \"add_note\""} 
+[2025-01-18 15:50:51] development.ERROR: Failed to retrieve senders {"limit":25,"page":1,"error":"Undefined array key \"add_note\""} 
+[2025-01-18 15:51:25] development.ERROR: Failed to retrieve senders {"limit":25,"page":1,"error":"Undefined array key \"personal_note\""} 
+[2025-01-18 15:51:36] development.ERROR: Failed to retrieve senders {"limit":25,"page":1,"error":"App\\Data\\SenderResponse::__construct(): Argument #1 ($id) must be of type int, string given, called in /Users/mrfansi/Projects/mailersend/app/Data/SenderResponse.php on line 48"} 
+[2025-01-18 15:51:54] development.ERROR: Failed to retrieve senders {"limit":25,"page":1,"error":"App\\Data\\SenderResponse::__construct(): Argument #4 ($reply_to_email) must be of type string, null given, called in /Users/mrfansi/Projects/mailersend/app/Data/SenderResponse.php on line 48"} 
+[2025-01-18 15:57:11] development.ERROR: Declaration of App\Mailersend\Sender::find(string $id): App\Data\SenderResponse must be compatible with App\Contracts\SenderRepositoryInterface::find(int $id): App\Data\SenderResponse {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Declaration of App\\Mailersend\\Sender::find(string $id): App\\Data\\SenderResponse must be compatible with App\\Contracts\\SenderRepositoryInterface::find(int $id): App\\Data\\SenderResponse at /Users/mrfansi/Projects/mailersend/app/Mailersend/Sender.php:125)
+[stacktrace]
+#0 {main}
+"} 
+[2025-01-18 15:59:30] development.ERROR: Failed to find sender {"sender_id":"x2p0347ex7lzdrn7","error":"Undefined array key \"id\""} 
+[2025-01-18 16:05:56] development.ERROR: Failed to create sender {"data":{"domain_id":"3m5jgroo3qmgdpyo","email":"irfan@harisenin.net","name":"Muhammad Irfan","personal_note":"Hi Im from this email","reply_to_name":null,"reply_to_email":null,"add_note":true},"error":"Undefined array key \"id\""} 
+[2025-01-18 18:08:12] development.ERROR: Failed to create sender {"data":{"domain_id":"3m5jgroo3qmgdpyo","email":"arvilla-kutch@harisenin.net","name":"Arvilla Kutch","personal_note":"","reply_to_name":"","reply_to_email":"","add_note":false},"error":"Undefined array key \"id\""} 
+[2025-01-18 18:08:26] development.ERROR: Failed to create sender {"data":{"domain_id":"3m5jgroo3qmgdpyo","email":"orie-ondricka@harisenin.net","name":"Orie Ondricka","personal_note":"","reply_to_name":"","reply_to_email":"","add_note":false},"error":"Undefined array key \"id\""} 
+[2025-01-18 18:34:51] development.INFO: Successfully retrieved sender: 25, 1  
+[2025-01-18 18:34:52] development.INFO: Successfully retrieved sender: 25, 2  
