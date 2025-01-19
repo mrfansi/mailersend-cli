@@ -14,6 +14,7 @@
 namespace App\Contracts;
 
 use App\Mailersend\Domain;
+use App\Mailersend\Email;
 use App\Mailersend\Sender;
 use App\Mailersend\Token;
 use Illuminate\Contracts\Cache\Repository as CacheInterface;
@@ -45,6 +46,13 @@ interface MailersendFactoryInterface
      * @return Token A configured Token instance for making API requests
      */
     public function token(): Token;
+
+    /**
+     * Creates and returns a new Email API instance
+     *
+     * @return Email A configured Email instance for making API requests
+     */
+    public function email(): Email;
 
     /**
      * Creates a new instance of the Mailersend factory

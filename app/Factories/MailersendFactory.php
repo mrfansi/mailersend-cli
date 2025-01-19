@@ -15,6 +15,7 @@ namespace App\Factories;
 
 use App\Contracts\MailersendFactoryInterface;
 use App\Mailersend\Domain;
+use App\Mailersend\Email;
 use App\Mailersend\Sender;
 use App\Mailersend\Token;
 use App\Services\DomainCacheService;
@@ -85,6 +86,20 @@ class MailersendFactory implements MailersendFactoryInterface
         return new Token(
             $client,
             new TokenCacheService($this->cache)
+        );
+    }
+
+    /**
+     * Create a new Token API instance
+     *
+     * @throws InvalidArgumentException When required configuration is missing
+     */
+    public function email(): Email
+    {
+        $client = $this->createClient();
+
+        return new Email(
+            $client,
         );
     }
 
