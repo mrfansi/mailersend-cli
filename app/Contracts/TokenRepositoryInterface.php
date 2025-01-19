@@ -15,6 +15,7 @@ namespace App\Contracts;
 
 use App\Data\TokenCreateResponse;
 use App\Data\TokenData;
+use App\Data\TokenEditData;
 use App\Data\TokenResponse;
 use Illuminate\Support\Collection;
 
@@ -52,9 +53,9 @@ interface TokenRepositoryInterface
      * Update sender
      *
      * @param  string  $id  Token ID
-     * @param  TokenData  $data  Token data
+     * @param  TokenEditData  $data  Token data
      */
-    public function update(string $id, TokenData $data): TokenResponse;
+    public function update(string $id, TokenEditData $data): TokenResponse;
 
     /**
      * Delete sender

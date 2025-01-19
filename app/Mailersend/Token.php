@@ -16,12 +16,14 @@ namespace App\Mailersend;
 use App\Contracts\TokenRepositoryInterface;
 use App\Data\TokenCreateResponse;
 use App\Data\TokenData;
+use App\Data\TokenEditData;
 use App\Data\TokenResponse;
 use App\Services\TokenCacheService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Pipeline;
 use InvalidArgumentException;
 use RuntimeException;
 use Throwable;
@@ -135,6 +137,162 @@ class Token implements TokenRepositoryInterface
     }
 
     /**
+     * Retrieve token details by ID
+     *
+     * @param  string  $id  Token ID to retrieve
+     * @return TokenResponse Token details
+     *
+     * @throws InvalidArgumentException When token ID is invalid
+     * @throws ConnectionException When API connection fails
+     * @throws RuntimeException When API response is not successful
+     * @throws Throwable
+     */
+    public function find(string $id): TokenResponse
+    {
+        $this->validateId($id);
+
+        try {
+            $response = $this->client->get("/token/$id");
+
+            if (! $response->successful()) {
+                throw new RuntimeException(
+                    sprintf('Failed to retrieve tokens: %s', $response->json('message'))
+                );
+            }
+
+            return TokenResponse::fromArray($response->json('data'));
+        } catch (Throwable $e) {
+            Log::error('Failed to find token', [
+                'verified' => $id,
+                'error' => $e->getMessage(),
+            ]);
+            throw $this->handleException($e);
+        }
+    }
+
+    /**
+     * Create new token
+     *
+     * @param  TokenData  $data  Token data
+     * @return TokenCreateResponse Created token details
+     *
+     * @throws Throwable
+     */
+    public function create(TokenData $data): TokenCreateResponse
+    {
+        try {
+            $response = $this->client->post('/token', $data->toArray());
+
+            if (! $response->successful()) {
+                throw new RuntimeException(
+                    sprintf('Failed to create token: %s', $response->body())
+                );
+            }
+
+            return TokenCreateResponse::fromArray($response->json('data'));
+        } catch (Throwable $e) {
+            Log::error('Failed to create token', [
+                'data' => $data->toArray(),
+                'error' => $e->getMessage(),
+            ]);
+            throw $this->handleException($e);
+        }
+    }
+
+    /**
+     * Update token
+     *
+     * @param  string  $id  Token ID to update
+     * @param  TokenEditData  $data  Token data
+     * @return TokenResponse Updated token details
+     *
+     * @throws InvalidArgumentException When token ID is invalid
+     * @throws ConnectionException When API connection fails
+     * @throws RuntimeException When API response is not successful
+     * @throws Throwable
+     */
+    public function update(string $id, TokenEditData $data): TokenResponse
+    {
+        $this->validateId($id);
+
+        try {
+            $response = Pipeline::send($data)
+                ->through([
+                    fn ($data, $next) => $data->name
+                        ? tap($this->client->put("/token/$id", ['name' => $data->name]), function ($response) {
+                            if (! $response->successful()) {
+                                throw new RuntimeException(
+                                    sprintf('Failed to update token: %s', $response->body())
+                                );
+                            }
+                        })
+                        : $next($data),
+                    fn ($data, $next) => $data->status
+                        ? tap($this->client->put("/token/$id/settings", ['status' => $data->status]), function ($response) {
+                            if (! $response->successful()) {
+                                throw new RuntimeException(
+                                    sprintf('Failed to update token: %s', $response->body())
+                                );
+                            }
+                        })
+                        : $next($data),
+                ])
+                ->thenReturn()
+                ->json('data');
+
+            return TokenResponse::fromArray($response);
+        } catch (Throwable $e) {
+            Log::error('Failed to update token', [
+                'verified' => $id,
+                'data' => $data->toArray(),
+                'error' => $e->getMessage(),
+            ]);
+            throw $this->handleException($e);
+        }
+    }
+
+    /**
+     * Delete token
+     *
+     * @param  string  $id  Token ID to delete
+     * @return bool True if deletion was successful
+     *
+     * @throws InvalidArgumentException When token ID is invalid
+     * @throws ConnectionException When API connection fails
+     * @throws Throwable
+     */
+    public function delete(string $id): bool
+    {
+        $this->validateId($id);
+
+        try {
+            $response = $this->client->delete("/token/$id");
+
+            return $response->successful();
+        } catch (Throwable $e) {
+            Log::error('Failed to delete token', [
+                'verified' => $id,
+                'error' => $e->getMessage(),
+            ]);
+            throw $this->handleException($e);
+        }
+    }
+
+    /**
+     * Validate token ID
+     *
+     * @param  string  $id  Token ID
+     *
+     * @throws InvalidArgumentException When ID is invalid
+     */
+    private function validateId(string $id): void
+    {
+        if (! $id) {
+            throw new InvalidArgumentException('Token ID cant be null');
+        }
+    }
+
+    /**
      * Validate pagination parameters
      *
      * @param  int  $limit  Number of items per page
@@ -174,145 +332,5 @@ class Token implements TokenRepositoryInterface
         }
 
         return new RuntimeException($e->getMessage(), 0, $e);
-    }
-
-    /**
-     * Retrieve token details by ID
-     *
-     * @param  string  $id  Token ID to retrieve
-     * @return TokenResponse Token details
-     *
-     * @throws InvalidArgumentException When token ID is invalid
-     * @throws ConnectionException When API connection fails
-     * @throws RuntimeException When API response is not successful
-     * @throws Throwable
-     */
-    public function find(string $id): TokenResponse
-    {
-        $this->validateId($id);
-
-        try {
-            $response = $this->client->get("/token/$id");
-
-            if (! $response->successful()) {
-                throw new RuntimeException(
-                    sprintf('Failed to retrieve tokens: %s', $response->json('message'))
-                );
-            }
-
-            return TokenResponse::fromArray($response->json('data'));
-        } catch (Throwable $e) {
-            Log::error('Failed to find token', [
-                'verified' => $id,
-                'error' => $e->getMessage(),
-            ]);
-            throw $this->handleException($e);
-        }
-    }
-
-    /**
-     * Validate token ID
-     *
-     * @param  string  $id  Token ID
-     *
-     * @throws InvalidArgumentException When ID is invalid
-     */
-    private function validateId(string $id): void
-    {
-        if (! $id) {
-            throw new InvalidArgumentException('Token ID cant be null');
-        }
-    }
-
-    /**
-     * Create new token
-     *
-     * @param  TokenData  $data  Token data
-     * @return TokenCreateResponse Created token details
-     *
-     * @throws Throwable
-     */
-    public function create(TokenData $data): TokenCreateResponse
-    {
-        try {
-            $response = $this->client->post('/token', $data->toArray());
-
-            if (! $response->successful()) {
-                throw new RuntimeException(
-                    sprintf('Failed to create token: %s', $response->body())
-                );
-            }
-
-            return TokenCreateResponse::fromArray($response->json());
-        } catch (Throwable $e) {
-            Log::error('Failed to create token', [
-                'data' => $data->toArray(),
-                'error' => $e->getMessage(),
-            ]);
-            throw $this->handleException($e);
-        }
-    }
-
-    /**
-     * Update token
-     *
-     * @param  string  $id  Token ID to update
-     * @param  TokenData  $data  Token data
-     * @return TokenResponse Updated token details
-     *
-     * @throws InvalidArgumentException When token ID is invalid
-     * @throws ConnectionException When API connection fails
-     * @throws RuntimeException When API response is not successful
-     * @throws Throwable
-     */
-    public function update(string $id, TokenData $data): TokenResponse
-    {
-        $this->validateId($id);
-
-        try {
-            $response = $this->client->put("/token/$id", $data->toArray());
-
-            if (! $response->successful()) {
-                throw new RuntimeException(
-                    sprintf('Failed to update token: %s', $response->body())
-                );
-            }
-
-            return TokenResponse::fromArray($response->json());
-        } catch (Throwable $e) {
-            Log::error('Failed to update token', [
-                'verified' => $id,
-                'data' => $data->toArray(),
-                'error' => $e->getMessage(),
-            ]);
-            throw $this->handleException($e);
-        }
-    }
-
-    /**
-     * Delete token
-     *
-     * @param  string  $id  Token ID to delete
-     * @return bool True if deletion was successful
-     *
-     * @throws InvalidArgumentException When token ID is invalid
-     * @throws ConnectionException When API connection fails
-     * @throws Throwable
-     */
-    public function delete(string $id): bool
-    {
-        $this->validateId($id);
-
-        try {
-            $response = $this->client->delete("/token/$id");
-
-            return $response->successful();
-        } catch (Throwable $e) {
-            Log::error('Failed to delete token', [
-                'verified' => $id,
-                'error' => $e->getMessage(),
-            ]);
-            throw $this->handleException($e);
-        }
     }
 }

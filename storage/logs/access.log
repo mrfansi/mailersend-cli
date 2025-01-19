@@ -103,3 +103,36 @@
 [2025-01-19 10:43:05] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 3  
 [2025-01-19 10:45:34] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 2  
 [2025-01-19 11:02:49] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  
+[2025-01-19 11:33:44] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 2  
+[2025-01-19 11:33:50] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  
+[2025-01-19 11:33:59] development.ERROR: Failed to create token {"data":{"name":"Test","domain_id":"3m5jgroo3qmgdpyo","scopes":["email_full"]},"error":"Undefined array key \"id\""} 
+[2025-01-19 11:35:01] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 3  
+[2025-01-19 11:35:31] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  
+[2025-01-19 11:35:54] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 4  
+[2025-01-19 11:36:10] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  
+[2025-01-19 11:36:16] development.ERROR: Failed to create token {"data":{"name":"Test 2","domain_id":"3m5jgroo3qmgdpyo","scopes":["email_full"]},"error":"Undefined array key \"access_token\""} 
+[2025-01-19 11:36:55] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  
+[2025-01-19 11:37:01] development.ERROR: Failed to create token {"data":{"name":"Test 3","domain_id":"3m5jgroo3qmgdpyo","scopes":["email_full"]},"error":"Undefined array key \"status\""} 
+[2025-01-19 11:37:37] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 5  
+[2025-01-19 11:37:43] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 4  
+[2025-01-19 11:37:48] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 3  
+[2025-01-19 11:37:52] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  
+[2025-01-19 11:38:01] development.ERROR: Failed to create token {"data":{"name":"Test ","domain_id":"3m5jgroo3qmgdpyo","scopes":["email_full"]},"error":"Undefined array key \"is_cname_verified\""} 
+[2025-01-19 11:38:49] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 3  
+[2025-01-19 11:38:58] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  
+[2025-01-19 11:39:48] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  
+[2025-01-19 11:40:11] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  
+[2025-01-19 11:40:40] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 5  
+[2025-01-19 11:54:58] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 5  
+[2025-01-19 11:55:05] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  
+[2025-01-19 11:56:15] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 5  
+[2025-01-19 11:56:21] development.ERROR: Failed to update token {"verified":"a43a6d3f8a2faf2e81e7b82f0389785beffc6fa89099ff024bc269d79c639d8f685cdbe8647d71e2","data":{"name":"Test 3","status":"unpause"},"error":"Target class [pipeline] does not exist."} 
+[2025-01-19 11:58:31] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 5  
+[2025-01-19 11:58:38] development.ERROR: Failed to update token {"verified":"a43a6d3f8a2faf2e81e7b82f0389785beffc6fa89099ff024bc269d79c639d8f685cdbe8647d71e2","data":{"name":"Test 3","status":"unpause"},"error":"App\\Mailersend\\Token::update(): Return value must be of type App\\Data\\TokenResponse, array returned"} 
+[2025-01-19 11:59:42] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 5  
+[2025-01-19 12:00:15] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 5  
+[2025-01-19 12:00:21] development.ERROR: Failed to update token {"verified":"a43a6d3f8a2faf2e81e7b82f0389785beffc6fa89099ff024bc269d79c639d8f685cdbe8647d71e2","data":{"name":"Test 3","status":"unpause"},"error":"Undefined array key \"id\""} 
+[2025-01-19 12:00:32] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 5  
+[2025-01-19 12:00:54] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 5  
+[2025-01-19 12:01:01] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 4  
+[2025-01-19 12:01:07] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 3  

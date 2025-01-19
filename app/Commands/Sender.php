@@ -145,44 +145,6 @@ class Sender extends Command implements CommandInterface
         $this->displayDetails($sender);
     }
 
-    private function generateRandomSender(int $max): void
-    {
-        $faker = Factory::create();
-        $domain_id = $this->getDomainID();
-
-        if (! $domain_id) {
-            throw new RuntimeException('Domain is required for create action');
-        }
-
-        /** @var DomainResponse $domain */
-        $domain = spin(
-            fn () => $this->mailersend->domain()->find($domain_id),
-            'Fetching domain details...'
-        );
-
-        foreach (range(1, $max) as $i) {
-
-            $firstName = $faker->firstName();
-            $lastName = $faker->lastName();
-            $name = "$firstName $lastName";
-
-            $data = new SenderData(
-                domain_id: $domain_id,
-                email: Str::slug($name).'@'.$domain->name,
-                name: $name,
-            );
-
-            /** @var SenderResponse $sender */
-            $sender = spin(
-                fn () => $this->mailersend->sender()->create($data),
-                'Creating sender...'
-            );
-
-            $this->info("$i. Sender added successfully! $sender->name <$sender->email>");
-
-        }
-    }
-
     /**
      * Show sender details
      */
@@ -414,5 +376,49 @@ class Sender extends Command implements CommandInterface
         ]));
 
         $this->table(...$detail);
+    }
+
+    /**
+     * Generate random sender
+     *
+     * This method uses the Faker library to generate
+     * random sender data and creates the sender in Mailersend.
+     *
+     * @param  int  $max  The number of random senders to generate
+     */
+    private function generateRandomSender(int $max): void
+    {
+        $faker = Factory::create();
+        $domain_id = $this->getDomainID();
+
+        if (! $domain_id) {
+            throw new RuntimeException('Domain is required for create action');
+        }
+
+        /** @var DomainResponse $domain */
+        $domain = spin(
+            fn () => $this->mailersend->domain()->find($domain_id),
+            'Fetching domain details...'
+        );
+
+        foreach (range(1, $max) as $i) {
+            $firstName = $faker->firstName();
+            $lastName = $faker->lastName();
+            $name = "$firstName $lastName";
+
+            $data = new SenderData(
+                domain_id: $domain_id,
+                email: Str::slug($name).'@'.$domain->name,
+                name: $name,
+            );
+
+            /** @var SenderResponse $sender */
+            $sender = spin(
+                fn () => $this->mailersend->sender()->create($data),
+                'Creating sender...'
+            );
+
+            $this->info("$i. Sender added successfully! $sender->name <$sender->email>");
+        }
     }
 }

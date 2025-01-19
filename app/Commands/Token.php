@@ -20,6 +20,7 @@ use App\Contracts\MailersendFactoryInterface;
 use App\Data\DomainResponse;
 use App\Data\TokenCreateResponse;
 use App\Data\TokenData;
+use App\Data\TokenEditData;
 use App\Data\TokenResponse;
 use App\Generator;
 use Illuminate\Support\Carbon;
@@ -127,6 +128,89 @@ class Token extends Command implements CommandInterface
     }
 
     /**
+     * Show token details
+     */
+    public function show(): void
+    {
+        $id = $this->getTokenID();
+
+        /** @var TokenResponse $token */
+        $token = spin(
+            fn () => $this->mailersend->token()->find($id),
+            'Fetching token details...'
+        );
+
+        $this->displayDetails($token);
+    }
+
+    /**
+     * Edit token details
+     */
+    public function edit(): void
+    {
+        $id = $this->getTokenID();
+        if (! $id) {
+            throw new InvalidArgumentException('Token ID is required for edit action');
+        }
+
+        /** @var TokenResponse $token */
+        $token = spin(
+            fn () => $this->mailersend->token()->find($id),
+            'Fetching token details...'
+        );
+
+        $data = $this->getEditData($token);
+
+        /** @var TokenResponse $updatedToken */
+        $updatedToken = spin(
+            fn () => $this->mailersend->token()->update($id, $data),
+            'Updating token...'
+        );
+
+        $this->info('Token updated successfully!');
+        $this->notify('Success', 'Token updated successfully!');
+
+        $this->displayDetails($updatedToken);
+    }
+
+    /**
+     * Delete a token
+     */
+    public function delete(): void
+    {
+        $id = $this->getTokenID();
+        if (! $id) {
+            throw new InvalidArgumentException('Token ID is required for delete action');
+        }
+
+        /** @var TokenResponse $token */
+        $token = spin(
+            fn () => $this->mailersend->token()->find($id),
+            'Fetching token details...'
+        );
+
+        $this->displayDetails($token);
+
+        if (! confirm(
+            "Do you want to delete the token ID $id?",
+            hint: 'Deleting a token cannot be undone! Any emails being sent through this token will be immediately rejected.'
+        )) {
+            return;
+        }
+
+        $success = spin(
+            fn () => $this->mailersend->token()->delete($id),
+            'Deleting token...'
+        );
+
+        if ($success) {
+            $this->info('Token deleted successfully!');
+        } else {
+            throw new RuntimeException('Failed to delete token');
+        }
+    }
+
+    /**
      * Get token data from form input
      */
     private function getData(?TokenResponse $current = null): TokenData
@@ -192,37 +276,30 @@ class Token extends Command implements CommandInterface
     }
 
     /**
-     * Display token create details in a table
+     * Get token data from form input
      */
-    private function displayCreateDetails(TokenCreateResponse $token): void
+    private function getEditData(?TokenResponse $current = null): TokenEditData
     {
-        $data = $this->generator->getDetailTable(collect([
-            Str::headline('id') => $token->id,
-            Str::headline('name') => $token->name,
-            Str::headline('status') => $token->status,
-            Str::headline('has_full') => $token->has_full,
-            Str::headline('preview') => $token->preview,
-            Str::headline('expires_at') => $token->expires_at,
-            Str::headline('created_at') => $token->created_at,
-        ]));
 
-        $this->table(...$data);
-    }
+        $formData = form()
+            ->text(
+                label: 'Token Name',
+                default: $current->name ?? '',
+                name: 'name'
+            )
+            ->select(
+                label: 'Status',
+                options: ['pause', 'unpause'],
+                default: $current->status ?? 'unpause',
+                name: 'status'
+            )
+            ->submit();
 
-    /**
-     * Show token details
-     */
-    public function show(): void
-    {
-        $id = $this->getTokenID();
+        $formData = array_filter($formData);
 
-        /** @var TokenResponse $token */
-        $token = spin(
-            fn () => $this->mailersend->token()->find($id),
-            'Fetching token details...'
+        return new TokenEditData(
+            ...$formData
         );
-
-        $this->displayDetails($token);
     }
 
     /**
@@ -241,69 +318,19 @@ class Token extends Command implements CommandInterface
     }
 
     /**
-     * Edit token details
+     * Display token create details in a table
      */
-    public function edit(): void
+    private function displayCreateDetails(TokenCreateResponse $token): void
     {
-        $id = $this->getTokenID();
-        if (! $id) {
-            throw new InvalidArgumentException('Token ID is required for edit action');
-        }
+        $data = $this->generator->getDetailTable(collect([
+            Str::headline('id') => $token->id,
+            Str::headline('name') => $token->name,
+            Str::headline('has_full') => $token->has_full ? 'Yes' : 'No',
+            Str::headline('preview') => $token->preview,
+            Str::headline('expires_at') => $token->expires_at,
+            Str::headline('created_at') => Carbon::parse($token->created_at)->diffForHumans(),
+        ]));
 
-        /** @var TokenResponse $token */
-        $token = spin(
-            fn () => $this->mailersend->token()->find($id),
-            'Fetching token details...'
-        );
-
-        $data = $this->getData($token);
-
-        /** @var TokenResponse $updatedToken */
-        $updatedToken = spin(
-            fn () => $this->mailersend->token()->update($id, $data),
-            'Updating token...'
-        );
-
-        $this->info('Token updated successfully!');
-        $this->notify('Success', 'Token updated successfully!');
-
-        $this->displayDetails($updatedToken);
-    }
-
-    /**
-     * Delete a token
-     */
-    public function delete(): void
-    {
-        $id = $this->getTokenID();
-        if (! $id) {
-            throw new InvalidArgumentException('Token ID is required for delete action');
-        }
-
-        /** @var TokenResponse $token */
-        $token = spin(
-            fn () => $this->mailersend->token()->find($id),
-            'Fetching token details...'
-        );
-
-        $this->displayDetails($token);
-
-        if (! confirm(
-            "Do you want to delete the token ID $id?",
-            hint: 'Deleting a token cannot be undone! Any emails being sent through this token will be immediately rejected.'
-        )) {
-            return;
-        }
-
-        $success = spin(
-            fn () => $this->mailersend->token()->delete($id),
-            'Deleting token...'
-        );
-
-        if ($success) {
-            $this->info('Token deleted successfully!');
-        } else {
-            throw new RuntimeException('Failed to delete token');
-        }
+        $this->table(...$data);
     }
 }
