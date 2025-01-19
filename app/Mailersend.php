@@ -16,6 +16,7 @@ namespace App;
 use App\Contracts\HttpClientFactory;
 use App\Contracts\MailersendFactoryInterface;
 use App\Mailersend\Domain;
+use App\Mailersend\Email;
 use App\Mailersend\Sender;
 use App\Mailersend\Token;
 use App\Services\DomainCacheService;
@@ -150,6 +151,18 @@ class Mailersend implements HttpClientFactory, MailersendFactoryInterface
         }
 
         return new Token($this->getClient(), $this->tokenCache);
+    }
+
+    /**
+     * Creates and returns a new Email API instance
+     *
+     * @return Email A configured Email instance for making API requests
+     *
+     * @throws RuntimeException If dependencies cannot be resolved
+     */
+    public function email(): Email
+    {
+        return new Email($this->getClient());
     }
 
     /**
