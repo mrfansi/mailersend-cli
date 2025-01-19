@@ -1,12 +1,25 @@
 <?php
 
+/*
+ * Copyright (c) 2025 Muhammad Irfan.
+ *  All rights reserved.
+ *
+ *  This project is created and maintained by Muhammad Irfan. Redistribution or modification
+ *  of this code is permitted only under the terms specified in the license.
+ *
+ *  @author    Muhammad Irfan <mrfansi@outlook.com>
+ *  @license    MIT
+ */
+
 namespace App\Factories;
 
 use App\Contracts\MailersendFactoryInterface;
 use App\Mailersend\Domain;
 use App\Mailersend\Sender;
+use App\Mailersend\Token;
 use App\Services\DomainCacheService;
 use App\Services\SenderCacheService;
+use App\Services\TokenCacheService;
 use Illuminate\Contracts\Cache\Repository as CacheInterface;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
@@ -57,6 +70,21 @@ class MailersendFactory implements MailersendFactoryInterface
         return new Domain(
             $client,
             new DomainCacheService($this->cache)
+        );
+    }
+
+    /**
+     * Create a new Token API instance
+     *
+     * @throws InvalidArgumentException When required configuration is missing
+     */
+    public function token(): Token
+    {
+        $client = $this->createClient();
+
+        return new Token(
+            $client,
+            new TokenCacheService($this->cache)
         );
     }
 

@@ -17,8 +17,10 @@ use App\Contracts\HttpClientFactory;
 use App\Contracts\MailersendFactoryInterface;
 use App\Mailersend\Domain;
 use App\Mailersend\Sender;
+use App\Mailersend\Token;
 use App\Services\DomainCacheService;
 use App\Services\SenderCacheService;
+use App\Services\TokenCacheService;
 use Illuminate\Contracts\Cache\Repository as CacheInterface;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
@@ -52,6 +54,11 @@ class Mailersend implements HttpClientFactory, MailersendFactoryInterface
      * Sender domain service instance
      */
     private ?DomainCacheService $domainCache = null;
+
+    /**
+     * Sender domain service instance
+     */
+    private ?TokenCacheService $tokenCache = null;
 
     /**
      * Constructor for Mailersend factory
@@ -127,6 +134,22 @@ class Mailersend implements HttpClientFactory, MailersendFactoryInterface
         }
 
         return new Domain($this->getClient(), $this->domainCache);
+    }
+
+    /**
+     * Creates and returns a new Token API instance
+     *
+     * @return Token A configured Token instance for making API requests
+     *
+     * @throws RuntimeException If dependencies cannot be resolved
+     */
+    public function token(): Token
+    {
+        if ($this->tokenCache === null) {
+            $this->tokenCache = new TokenCacheService($this->cache);
+        }
+
+        return new Token($this->getClient(), $this->tokenCache);
     }
 
     /**

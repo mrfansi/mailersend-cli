@@ -13,52 +13,53 @@
 
 namespace App\Contracts;
 
-use App\Data\DomainData;
-use App\Data\DomainResponse;
+use App\Data\TokenCreateResponse;
+use App\Data\TokenData;
+use App\Data\TokenResponse;
 use Illuminate\Support\Collection;
 
 /**
- * Interface for Domain Repository
+ * Interface for Token Repository
  *
- * This interface defines the contract for interacting with Mailersend Domains.
+ * This interface defines the contract for interacting with Mailersend Tokens.
  */
-interface DomainRepositoryInterface
+interface TokenRepositoryInterface
 {
     /**
      * Get all senders with pagination
      *
      * @param  int  $limit  Items per page
      * @param  int  $page  Pagination offset
-     * @return Collection<DomainResponse>
+     * @return Collection<TokenResponse>
      */
     public function all(int $limit = 10, int $page = 1): Collection;
 
     /**
      * Find sender by ID
      *
-     * @param  string  $id  Domain ID
+     * @param  string  $id  Token ID
      */
-    public function find(string $id): DomainResponse;
+    public function find(string $id): TokenResponse;
 
     /**
      * Create new sender
      *
-     * @param  DomainData  $data  Domain data
+     * @param  TokenData  $data  Token data
      */
-    public function create(DomainData $data): DomainResponse;
+    public function create(TokenData $data): TokenCreateResponse;
 
     /**
      * Update sender
      *
-     * @param  string  $id  Domain ID
-     * @param  DomainData  $data  Domain data
+     * @param  string  $id  Token ID
+     * @param  TokenData  $data  Token data
      */
-    public function update(string $id, DomainData $data): DomainResponse;
+    public function update(string $id, TokenData $data): TokenResponse;
 
     /**
      * Delete sender
      *
-     * @param  string  $id  Domain ID
+     * @param  string  $id  Token ID
      */
     public function delete(string $id): bool;
 }

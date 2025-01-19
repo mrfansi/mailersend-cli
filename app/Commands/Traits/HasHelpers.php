@@ -15,6 +15,7 @@ namespace App\Commands\Traits;
 
 use App\Data\DomainResponse;
 use App\Data\SenderResponse;
+use App\Data\TokenResponse;
 use Illuminate\Support\Collection;
 use RuntimeException;
 
@@ -96,6 +97,45 @@ trait HasHelpers
 
         if (! $id) {
             throw new RuntimeException('Sender not found');
+        }
+
+        return $id;
+    }
+
+    /**
+     * Get token ID from option or search
+     *
+     * @throws RuntimeException When token ID cannot be found
+     */
+    private function getTokenID(): string
+    {
+        /** @var Collection<TokenResponse> $tokens */
+        $tokens = spin(
+            fn () => $this->mailersend->token()->all(),
+            'Fetching tokens...'
+        );
+
+        if ($id = $this->option('id')) {
+            $token = $tokens->firstWhere('id', $id);
+            if ($token) {
+                return $token->id;
+            }
+        }
+
+        $id = search(
+            'Search token by name',
+            fn (string $value) => strlen($value) > 0
+                ? $tokens->filter(
+                    fn (TokenResponse $token) => str_contains(
+                        strtolower($token->name),
+                        strtolower($value)
+                    )
+                )->pluck('name', 'id')->toArray()
+                : []
+        );
+
+        if (! $id) {
+            throw new RuntimeException('Token not found');
         }
 
         return $id;

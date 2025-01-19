@@ -1,17 +1,14 @@
 <?php
 
 /*
- * Copyright (c) 2025 Muhammad irfan.
- * All rights reserved.
+ * Copyright (c) 2025 Muhammad Irfan.
+ *  All rights reserved.
  *
- * This project is created and maintained by Muhammad Irfan. Redistribution or modification
- * of this code is permitted only under the terms specified in the license.
+ *  This project is created and maintained by Muhammad Irfan. Redistribution or modification
+ *  of this code is permitted only under the terms specified in the license.
  *
- * @package    postmark-cli
- * @license    MIT
- * @author     Muhammad Irfan <mrfansi@outlook.com>
- * @version    1.0.0
- * @since      2025-01-18
+ *  @author    Muhammad Irfan <mrfansi@outlook.com>
+ *  @license    MIT
  */
 
 namespace App\Mailersend;
@@ -84,7 +81,7 @@ class Domain implements DomainRepositoryInterface
      * @throws ConnectionException When API connection fails
      * @throws RuntimeException|Throwable When API response is not successful
      */
-    public function all(int $limit = 25, int $page = 0): Collection
+    public function all(int $limit = 25, int $page = 1): Collection
     {
         $this->validatePaginationParams($limit, $page);
 
@@ -296,7 +293,7 @@ class Domain implements DomainRepositoryInterface
     private function validateId(string $id): void
     {
         if (! $id) {
-            throw new InvalidArgumentException('Domain ID must be greater than 0');
+            throw new InvalidArgumentException('Domain ID cant be null');
         }
     }
 

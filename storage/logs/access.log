@@ -26,3 +26,78 @@
 [2025-01-18 19:20:43] development.INFO: Successfully retrieved domain, page: 0, limit: 25, data: 4  
 [2025-01-18 19:21:07] development.INFO: Successfully retrieved sender, page: 1, limit: 25, data: 10  
 [2025-01-18 19:21:17] development.INFO: Successfully retrieved domain, page: 0, limit: 25, data: 4  
+[2025-01-19 09:24:29] development.INFO: Successfully retrieved sender, page: 1, limit: 25, data: 10  
+[2025-01-19 09:24:43] development.ERROR: The "--delete-all" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--delete-all\" option does not exist. at /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/ArgvInput.php:226)
+[stacktrace]
+#0 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/ArgvInput.php(155): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('delete-all', NULL)
+#1 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/ArgvInput.php(88): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--delete-all')
+#2 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/ArgvInput.php(77): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--delete-all', true)
+#3 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Command/Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
+#5 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Application.php(1094): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand(Object(NunoMaduro\\LaravelConsoleSummary\\SummaryCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Application.php(193): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Console/Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/framework/src/Kernel.php(111): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 /Users/mrfansi/Projects/mailersend/mailersend(35): LaravelZero\\Framework\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 {main}
+"} 
+[2025-01-19 09:24:50] development.ERROR: The "--delete-all" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--delete-all\" option does not exist. at /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/ArgvInput.php:226)
+[stacktrace]
+#0 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/ArgvInput.php(155): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('delete-all', NULL)
+#1 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/ArgvInput.php(88): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--delete-all')
+#2 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/ArgvInput.php(77): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--delete-all', true)
+#3 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Command/Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
+#5 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Application.php(1094): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand(Object(NunoMaduro\\LaravelConsoleSummary\\SummaryCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Application.php(193): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Console/Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/framework/src/Kernel.php(111): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 /Users/mrfansi/Projects/mailersend/mailersend(35): LaravelZero\\Framework\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 {main}
+"} 
+[2025-01-19 09:25:38] development.ERROR: The "--delete-all" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--delete-all\" option does not exist. at /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/ArgvInput.php:226)
+[stacktrace]
+#0 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/ArgvInput.php(155): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('delete-all', NULL)
+#1 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/ArgvInput.php(88): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--delete-all')
+#2 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/ArgvInput.php(77): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--delete-all', true)
+#3 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Input/Input.php(53): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Command/Command.php(238): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
+#5 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Application.php(1094): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Application.php(342): Symfony\\Component\\Console\\Application->doRunCommand(Object(NunoMaduro\\LaravelConsoleSummary\\SummaryCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 /Users/mrfansi/Projects/mailersend/vendor/symfony/console/Application.php(193): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/foundation/src/Illuminate/Foundation/Console/Kernel.php(196): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 /Users/mrfansi/Projects/mailersend/vendor/laravel-zero/framework/src/Kernel.php(111): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 /Users/mrfansi/Projects/mailersend/mailersend(35): LaravelZero\\Framework\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 {main}
+"} 
+[2025-01-19 09:25:50] development.INFO: Successfully retrieved sender, page: 1, limit: 25, data: 10  
+[2025-01-19 09:49:21] development.ERROR: Failed to retrieve tokens {"limit":25,"page":0,"error":"Failed to retrieve tokens: {\"message\":\"The page must be at least 1.\",\"errors\":{\"page\":[\"The page must be at least 1.\"]}}"} 
+[2025-01-19 09:50:01] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 2  
+[2025-01-19 09:50:46] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 2  
+[2025-01-19 09:50:58] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 2  
+[2025-01-19 09:52:49] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 2  
+[2025-01-19 09:53:26] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 2  
+[2025-01-19 09:54:43] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 2  
+[2025-01-19 09:55:15] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 2  
+[2025-01-19 09:57:16] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 2  
+[2025-01-19 09:58:03] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 2  
+[2025-01-19 09:58:19] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 2  
+[2025-01-19 10:05:10] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  
+[2025-01-19 10:05:50] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  
+[2025-01-19 10:06:02] development.ERROR: Failed to create token {"data":{"name":"Test","domain_id":"3m5jgroo3qmgdpyo","scopes":["email_full"]},"error":"Undefined array key \"id\""} 
+[2025-01-19 10:06:15] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 3  
+[2025-01-19 10:07:28] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  
+[2025-01-19 10:13:35] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 4  
+[2025-01-19 10:13:35] development.ERROR: Failed to retrieve tokens {"limit":25,"page":1,"error":"Undefined array key \"has_full\""} 
+[2025-01-19 10:14:23] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 4  
+[2025-01-19 10:14:23] development.ERROR: Failed to retrieve tokens {"limit":25,"page":1,"error":"Undefined array key \"has_full\""} 
+[2025-01-19 10:15:30] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 4  
+[2025-01-19 10:15:30] development.ERROR: Failed to retrieve tokens {"limit":25,"page":1,"error":"Undefined array key \"has_full\""} 
+[2025-01-19 10:15:58] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 4  
+[2025-01-19 10:22:00] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  
+[2025-01-19 10:22:06] development.ERROR: Failed to create token {"data":{"name":"Test 3","domain_id":"3m5jgroo3qmgdpyo","scopes":["email_full"]},"error":"Undefined array key \"id\""} 
+[2025-01-19 10:22:44] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 5  
+[2025-01-19 10:41:56] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 4  
+[2025-01-19 10:43:05] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 3  

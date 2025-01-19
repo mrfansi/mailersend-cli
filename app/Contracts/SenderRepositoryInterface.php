@@ -1,17 +1,14 @@
 <?php
 
 /*
- * Copyright (c) 2025 Muhammad irfan.
- * All rights reserved.
+ * Copyright (c) 2025 Muhammad Irfan.
+ *  All rights reserved.
  *
- * This project is created and maintained by Muhammad Irfan. Redistribution or modification
- * of this code is permitted only under the terms specified in the license.
+ *  This project is created and maintained by Muhammad Irfan. Redistribution or modification
+ *  of this code is permitted only under the terms specified in the license.
  *
- * @package    postmark-cli
- * @license    MIT
- * @author     Muhammad Irfan <mrfansi@outlook.com>
- * @version    1.0.0
- * @since      2025-01-18
+ *  @author    Muhammad Irfan <mrfansi@outlook.com>
+ *  @license    MIT
  */
 
 namespace App\Contracts;
@@ -23,7 +20,7 @@ use Illuminate\Support\Collection;
 /**
  * Interface for Sender Repository
  *
- * This interface defines the contract for interacting with Postmark Senders.
+ * This interface defines the contract for interacting with Mailersend Senders.
  */
 interface SenderRepositoryInterface
 {
