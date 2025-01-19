@@ -1,7 +1,19 @@
 <?php
 
+/*
+ * Copyright (c) 2025 Muhammad Irfan.
+ *  All rights reserved.
+ *
+ *  This project is created and maintained by Muhammad Irfan. Redistribution or modification
+ *  of this code is permitted only under the terms specified in the license.
+ *
+ *  @author    Muhammad Irfan <mrfansi@outlook.com>
+ *  @license    MIT
+ */
+
 namespace App\Commands;
 
+use App\Commands\Contracts\CommandInterface;
 use App\Commands\Traits\HasHandle;
 use App\Commands\Traits\HasHelpers;
 use App\Contracts\MailersendFactoryInterface;
@@ -28,7 +40,7 @@ use function Laravel\Prompts\text;
  * This command provides functionality to manage Mailersend senders
  * through the command line interface.
  */
-class Sender extends Command
+class Sender extends Command implements CommandInterface
 {
     use HasHandle;
     use HasHelpers;
@@ -73,25 +85,9 @@ class Sender extends Command
     }
 
     /**
-     * Dispatch action based on command argument
-     *
-     * @throws InvalidArgumentException When action is invalid
-     */
-    private function dispatchAction(string $action): void
-    {
-        if (! in_array($action, ['list', 'show', 'new', 'edit', 'delete'])) {
-            throw new InvalidArgumentException(
-                'Invalid action. Use: list, show, new, edit, or delete'
-            );
-        }
-
-        $this->{$action.'Sender'}();
-    }
-
-    /**
      * List all senders
      */
-    private function listSender(): void
+    public function list(): void
     {
 
         /** @var Collection<SenderResponse> $senders */
@@ -122,7 +118,7 @@ class Sender extends Command
     /**
      * Create a new sender
      */
-    private function newSender(): void
+    public function new(): void
     {
         if ($this->option('generate-random')) {
             $max = text(
@@ -137,7 +133,7 @@ class Sender extends Command
             return;
         }
 
-        $data = $this->getSenderData();
+        $data = $this->getData();
 
         /** @var SenderResponse $sender */
         $sender = spin(
@@ -146,7 +142,7 @@ class Sender extends Command
         );
 
         $this->info('Sender created successfully!');
-        $this->displaySenderDetails($sender);
+        $this->displayDetails($sender);
     }
 
     private function generateRandomSender(int $max): void
@@ -182,7 +178,7 @@ class Sender extends Command
                 'Creating sender...'
             );
 
-            $this->info("Sender added successfully! $sender->name <$sender->email>");
+            $this->info("$i. Sender added successfully! $sender->name <$sender->email>");
 
         }
     }
@@ -190,7 +186,7 @@ class Sender extends Command
     /**
      * Show sender details
      */
-    private function showSender(): void
+    public function show(): void
     {
         $id = $this->getSenderID();
 
@@ -201,13 +197,13 @@ class Sender extends Command
         );
 
         $this->title('Sender Details');
-        $this->displaySenderDetails($sender);
+        $this->displayDetails($sender);
     }
 
     /**
      * Edit sender details
      */
-    private function editSender(): void
+    public function edit(): void
     {
         $id = $this->getSenderID();
         if (! $id) {
@@ -220,7 +216,7 @@ class Sender extends Command
             'Fetching sender details...'
         );
 
-        $data = $this->getSenderData($sender);
+        $data = $this->getData($sender);
 
         /** @var SenderResponse $updatedSender */
         $updatedSender = spin(
@@ -229,7 +225,7 @@ class Sender extends Command
         );
 
         $this->info('Sender updated successfully!');
-        $this->displaySenderDetails($updatedSender);
+        $this->displayDetails($updatedSender);
     }
 
     /**
@@ -243,10 +239,10 @@ class Sender extends Command
      * @throws RuntimeException If an error occurs during the deletion process
      * @throws Throwable
      */
-    private function deleteSender(): void
+    public function delete(): void
     {
         if ($this->option('delete-all')) {
-            $this->deleteAllSenders();
+            $this->deleteAll();
 
             return;
         }
@@ -264,7 +260,7 @@ class Sender extends Command
             'Fetching sender details...'
         );
 
-        $this->displaySenderDetails($sender);
+        $this->displayDetails($sender);
 
         // Confirm the deletion operation with the user
         if (! confirm(
@@ -295,7 +291,7 @@ class Sender extends Command
      *
      * @throws Throwable If an error occurs during the deletion process
      */
-    private function deleteAllSenders(): void
+    private function deleteAll(): void
     {
         // Confirm the deletion operation with the user
         if (! confirm(
@@ -331,7 +327,7 @@ class Sender extends Command
     /**
      * Get sender data from form input
      */
-    private function getSenderData(?SenderResponse $current = null): SenderData
+    private function getData(?SenderResponse $current = null): SenderData
     {
         /** @var Collection<DomainResponse> $domains */
         $domains = spin(
@@ -405,7 +401,7 @@ class Sender extends Command
     /**
      * Display sender details in a table
      */
-    private function displaySenderDetails(SenderResponse $sender): void
+    private function displayDetails(SenderResponse $sender): void
     {
         $detail = $this->generator->getDetailTable(collect([
             Str::upper('id') => $sender->id,

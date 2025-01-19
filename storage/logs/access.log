@@ -101,3 +101,5 @@
 [2025-01-19 10:22:44] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 5  
 [2025-01-19 10:41:56] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 4  
 [2025-01-19 10:43:05] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 3  
+[2025-01-19 10:45:34] development.INFO: Successfully retrieved token, page: 1, limit: 25, data: 2  
+[2025-01-19 11:02:49] development.INFO: Successfully retrieved domain, page: 1, limit: 25, data: 4  

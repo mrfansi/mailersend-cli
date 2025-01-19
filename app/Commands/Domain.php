@@ -1,7 +1,19 @@
 <?php
 
+/*
+ * Copyright (c) 2025 Muhammad Irfan.
+ *  All rights reserved.
+ *
+ *  This project is created and maintained by Muhammad Irfan. Redistribution or modification
+ *  of this code is permitted only under the terms specified in the license.
+ *
+ *  @author    Muhammad Irfan <mrfansi@outlook.com>
+ *  @license    MIT
+ */
+
 namespace App\Commands;
 
+use App\Commands\Contracts\CommandInterface;
 use App\Commands\Traits\HasHandle;
 use App\Commands\Traits\HasHelpers;
 use App\Contracts\MailersendFactoryInterface;
@@ -26,7 +38,7 @@ use function Laravel\Prompts\text;
  * This command provides functionality to manage Mailersend domains
  * through the command line interface.
  */
-class Domain extends Command
+class Domain extends Command implements CommandInterface
 {
     use HasHandle;
     use HasHelpers;
@@ -70,25 +82,9 @@ class Domain extends Command
     }
 
     /**
-     * Dispatch action based on command argument
-     *
-     * @throws InvalidArgumentException When action is invalid
-     */
-    private function dispatchAction(string $action): void
-    {
-        if (! in_array($action, ['list', 'show', 'new', 'edit', 'delete'])) {
-            throw new InvalidArgumentException(
-                'Invalid action. Use: list, show, new, edit, or delete'
-            );
-        }
-
-        $this->{$action.'Domain'}();
-    }
-
-    /**
      * List all domains
      */
-    private function listDomain(): void
+    public function list(): void
     {
 
         /** @var Collection<DomainResponse> $domains */
@@ -119,9 +115,9 @@ class Domain extends Command
     /**
      * Create a new domain
      */
-    private function newDomain(): void
+    public function new(): void
     {
-        $data = $this->getDomainData();
+        $data = $this->getData();
 
         /** @var DomainResponse $domain */
         $domain = spin(
@@ -130,13 +126,13 @@ class Domain extends Command
         );
 
         $this->info('Domain created successfully!');
-        $this->displayDomainDetails($domain);
+        $this->displayDetails($domain);
     }
 
     /**
      * Show domain details
      */
-    private function showDomain(): void
+    public function show(): void
     {
         $id = $this->getDomainID();
 
@@ -146,13 +142,13 @@ class Domain extends Command
             'Fetching domain details...'
         );
 
-        $this->displayDomainDetails($domain);
+        $this->displayDetails($domain);
     }
 
     /**
      * Edit domain details
      */
-    private function editDomain(): void
+    public function edit(): void
     {
         $id = $this->getDomainID();
         if (! $id) {
@@ -165,7 +161,7 @@ class Domain extends Command
             'Fetching domain details...'
         );
 
-        $data = $this->getDomainData($domain);
+        $data = $this->getData($domain);
 
         /** @var DomainResponse $updatedDomain */
         $updatedDomain = spin(
@@ -176,13 +172,13 @@ class Domain extends Command
         $this->info('Domain updated successfully!');
         $this->notify('Success', 'Domain updated successfully!');
 
-        $this->displayDomainDetails($updatedDomain);
+        $this->displayDetails($updatedDomain);
     }
 
     /**
      * Delete a domain
      */
-    private function deleteDomain(): void
+    public function delete(): void
     {
         $id = $this->getDomainID();
         if (! $id) {
@@ -195,7 +191,7 @@ class Domain extends Command
             'Fetching domain details...'
         );
 
-        $this->displayDomainDetails($domain);
+        $this->displayDetails($domain);
 
         if (! confirm(
             "Do you want to delete the domain ID $id?",
@@ -219,7 +215,7 @@ class Domain extends Command
     /**
      * Get domain data from form input
      */
-    private function getDomainData(?DomainResponse $current = null): DomainData
+    private function getData(?DomainResponse $current = null): DomainData
     {
         $formData = form()
             ->text(
@@ -259,7 +255,7 @@ class Domain extends Command
     /**
      * Display domain details in a table
      */
-    private function displayDomainDetails(DomainResponse $domain): void
+    private function displayDetails(DomainResponse $domain): void
     {
         $detail = $this->generator->getDetailTable(collect([
             Str::upper('id') => $domain->id,

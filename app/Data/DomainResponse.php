@@ -1,5 +1,16 @@
 <?php
 
+/*
+ * Copyright (c) 2025 Muhammad Irfan.
+ *  All rights reserved.
+ *
+ *  This project is created and maintained by Muhammad Irfan. Redistribution or modification
+ *  of this code is permitted only under the terms specified in the license.
+ *
+ *  @author    Muhammad Irfan <mrfansi@outlook.com>
+ *  @license    MIT
+ */
+
 namespace App\Data;
 
 /**
@@ -27,8 +38,8 @@ readonly class DomainResponse
      * @param  bool  $is_dns_active  DNS active status
      * @param  bool  $is_cname_active  CNAME active status
      * @param  bool  $is_tracking_allowed  Tracking permission status
-     * @param  bool  $has_not_queued_messages  Status of unqueued messages
-     * @param  int  $not_queued_messages_count  Count of unqueued messages
+     * @param  bool  $has_not_queued_messages  Status of enqueued messages
+     * @param  int  $not_queued_messages_count  Count of enqueued messages
      * @param  DomainSettingResponse  $domain_settings  Domain settings configuration
      * @param  string  $created_at  Creation timestamp
      * @param  string  $updated_at  Last update timestamp

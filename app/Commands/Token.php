@@ -13,6 +13,7 @@
 
 namespace App\Commands;
 
+use App\Commands\Contracts\CommandInterface;
 use App\Commands\Traits\HasHandle;
 use App\Commands\Traits\HasHelpers;
 use App\Contracts\MailersendFactoryInterface;
@@ -38,7 +39,7 @@ use function Laravel\Prompts\spin;
  * This command provides functionality to manage Mailersend tokens
  * through the command line interface.
  */
-class Token extends Command
+class Token extends Command implements CommandInterface
 {
     use HasHandle;
     use HasHelpers;
@@ -82,25 +83,9 @@ class Token extends Command
     }
 
     /**
-     * Dispatch action based on command argument
-     *
-     * @throws InvalidArgumentException When action is invalid
-     */
-    private function dispatchAction(string $action): void
-    {
-        if (! in_array($action, ['list', 'show', 'new', 'edit', 'delete'])) {
-            throw new InvalidArgumentException(
-                'Invalid action. Use: list, show, new, edit, or delete'
-            );
-        }
-
-        $this->{$action.'Token'}();
-    }
-
-    /**
      * List all tokens
      */
-    private function listToken(): void
+    public function list(): void
     {
 
         /** @var Collection<TokenResponse> $tokens */
@@ -127,9 +112,9 @@ class Token extends Command
     /**
      * Create a new token
      */
-    private function newToken(): void
+    public function new(): void
     {
-        $data = $this->getTokenData();
+        $data = $this->getData();
 
         /** @var TokenCreateResponse $token */
         $token = spin(
@@ -138,13 +123,13 @@ class Token extends Command
         );
 
         $this->info('Token created successfully!');
-        $this->displayTokenCreateDetails($token);
+        $this->displayCreateDetails($token);
     }
 
     /**
      * Get token data from form input
      */
-    private function getTokenData(?TokenResponse $current = null): TokenData
+    private function getData(?TokenResponse $current = null): TokenData
     {
         /** @var Collection<DomainResponse> $domains */
         $domains = spin(
@@ -209,7 +194,7 @@ class Token extends Command
     /**
      * Display token create details in a table
      */
-    private function displayTokenCreateDetails(TokenCreateResponse $token): void
+    private function displayCreateDetails(TokenCreateResponse $token): void
     {
         $data = $this->generator->getDetailTable(collect([
             Str::headline('id') => $token->id,
@@ -227,7 +212,7 @@ class Token extends Command
     /**
      * Show token details
      */
-    private function showToken(): void
+    public function show(): void
     {
         $id = $this->getTokenID();
 
@@ -237,13 +222,13 @@ class Token extends Command
             'Fetching token details...'
         );
 
-        $this->displayTokenDetails($token);
+        $this->displayDetails($token);
     }
 
     /**
      * Display token details in a table
      */
-    private function displayTokenDetails(TokenResponse $token): void
+    private function displayDetails(TokenResponse $token): void
     {
         $data = $this->generator->getDetailTable(collect([
             Str::upper('id') => $token->id,
@@ -258,7 +243,7 @@ class Token extends Command
     /**
      * Edit token details
      */
-    private function editToken(): void
+    public function edit(): void
     {
         $id = $this->getTokenID();
         if (! $id) {
@@ -271,7 +256,7 @@ class Token extends Command
             'Fetching token details...'
         );
 
-        $data = $this->getTokenData($token);
+        $data = $this->getData($token);
 
         /** @var TokenResponse $updatedToken */
         $updatedToken = spin(
@@ -282,13 +267,13 @@ class Token extends Command
         $this->info('Token updated successfully!');
         $this->notify('Success', 'Token updated successfully!');
 
-        $this->displayTokenDetails($updatedToken);
+        $this->displayDetails($updatedToken);
     }
 
     /**
      * Delete a token
      */
-    private function deleteToken(): void
+    public function delete(): void
     {
         $id = $this->getTokenID();
         if (! $id) {
@@ -301,7 +286,7 @@ class Token extends Command
             'Fetching token details...'
         );
 
-        $this->displayTokenDetails($token);
+        $this->displayDetails($token);
 
         if (! confirm(
             "Do you want to delete the token ID $id?",

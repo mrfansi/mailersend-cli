@@ -38,4 +38,20 @@ trait HasHandle
             }
         }
     }
+
+    /**
+     * Dispatch action based on command argument
+     *
+     * @throws InvalidArgumentException When action is invalid
+     */
+    private function dispatchAction(string $action): void
+    {
+        if (! in_array($action, ['list', 'show', 'new', 'edit', 'delete'])) {
+            throw new InvalidArgumentException(
+                'Invalid action. Use: list, show, new, edit, or delete'
+            );
+        }
+
+        $this->{$action}();
+    }
 }
