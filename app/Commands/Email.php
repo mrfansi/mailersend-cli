@@ -22,7 +22,6 @@ use App\Data\EmailResponse;
 use App\Data\SenderResponse;
 use App\Data\TemplateResponse;
 use App\Generator;
-use Faker\Factory;
 use Illuminate\Support\Collection;
 use LaravelZero\Framework\Commands\Command;
 use RuntimeException;
@@ -85,20 +84,53 @@ class Email extends Command
 
     /**
      * Execute the console command.
+     *
+     * This method handles the main command execution flow, routing to appropriate
+     * action handlers based on the provided action argument. It includes comprehensive
+     * error handling and user feedback.
+     *
+     * @return int Command exit code (0: success, 1: failure)
+     *
+     * @throws RuntimeException When an invalid action is provided
      */
     public function handle(): int
     {
         try {
             $action = $this->argument('action');
 
-            return match ($action) {
+            if (! in_array($action, ['list', 'show', 'send'])) {
+                throw new RuntimeException(
+                    sprintf(
+                        'Invalid action "%s". Available actions: list, show, send',
+                        $action
+                    )
+                );
+            }
+
+            $this->info("Executing {$action} action...");
+
+            $result = match ($action) {
                 'list' => $this->list(),
                 'show' => $this->show(),
                 'send' => $this->send(),
                 default => $this->invalidAction($action)
             };
+
+            if ($result === self::SUCCESS) {
+                $this->info("Action {$action} completed successfully!");
+            }
+
+            return $result;
+        } catch (RuntimeException $e) {
+            $this->error("Command failed: {$e->getMessage()}");
+            $this->line('For help, run: mailersend email --help');
+
+            return self::FAILURE;
         } catch (Throwable $e) {
-            $this->error($e->getMessage());
+            $this->error("Unexpected error: {$e->getMessage()}");
+            if ($this->getOutput()->isVerbose()) {
+                $this->error($e->getTraceAsString());
+            }
 
             return self::FAILURE;
         }
@@ -106,47 +138,140 @@ class Email extends Command
 
     /**
      * Send new email(s)
+     *
+     * @return int Command exit code
+     *
+     * @throws RuntimeException If email sending fails
      */
     protected function send(): int
     {
-        $isBulk = $this->option('bulk');
+        try {
+            $isBulk = $this->option('bulk');
 
-        if ($isBulk) {
-            return $this->sendBulk();
+            if ($isBulk) {
+                return $this->sendBulk();
+            }
+
+            $emailData = $this->collectEmailData();
+
+            /** @var EmailResponse $response */
+            $response = spin(
+                fn () => $this->mailersend->email()->send($emailData),
+                'Sending email...'
+            );
+
+            $this->info('Email sent successfully!');
+            $this->displayEmailSummary($response);
+
+            return self::SUCCESS;
+        } catch (RuntimeException $e) {
+            $this->error("Failed to send email: {$e->getMessage()}");
+
+            return self::FAILURE;
         }
-
-        $emailData = $this->collectEmailData();
-
-        /** @var EmailResponse $response */
-        $response = spin(
-            fn () => $this->mailersend->email()->send($emailData),
-            'Sending email...'
-        );
-
-        return self::SUCCESS;
     }
 
     /**
      * Send bulk emails
+     *
+     * @return int Command exit code
+     *
+     * @throws RuntimeException If bulk email sending fails
      */
     protected function sendBulk(): int
     {
-        $emails = new Collection;
+        try {
+            $emails = new Collection;
+            $failedEmails = new Collection;
 
-        do {
-            $emailData = $this->collectEmailData();
-            $emails->push($emailData);
+            do {
+                try {
+                    $emailData = $this->collectEmailData();
+                    $emails->push($emailData);
+                } catch (RuntimeException $e) {
+                    $this->warn("Skipping email: {$e->getMessage()}");
+                    $failedEmails->push($emailData ?? null);
+                    if (! confirm('Do you want to continue with remaining emails?')) {
+                        break;
+                    }
+                }
 
-            $continue = confirm('Do you want to add another email?');
-        } while ($continue);
+                $continue = confirm('Do you want to add another email?');
+            } while ($continue);
 
-        /** @var Collection<EmailResponse> $responses */
-        $responses = spin(
-            fn () => $this->mailersend->email()->bulkSend($emails),
-            'Sending bulk emails...'
+            if ($emails->isEmpty()) {
+                $this->error('No valid emails to send');
+
+                return self::FAILURE;
+            }
+
+            /** @var Collection<EmailResponse> $responses */
+            $responses = spin(
+                fn () => $this->mailersend->email()->bulkSend($emails),
+                'Sending bulk emails...'
+            );
+
+            $this->displayBulkEmailSummary($responses, $failedEmails);
+
+            return $failedEmails->isEmpty() ? self::SUCCESS : self::FAILURE;
+        } catch (RuntimeException $e) {
+            $this->error("Failed to send bulk emails: {$e->getMessage()}");
+
+            return self::FAILURE;
+        }
+    }
+
+    /**
+     * Display summary of single email sending
+     */
+    private function displayEmailSummary(EmailResponse $response): void
+    {
+        $this->table(
+            ['Email ID', 'Status', 'Message'],
+            [
+                [
+                    $response->id ?? 'N/A',
+                    'Success',
+                    'Email queued for delivery',
+                ],
+            ]
         );
+    }
 
-        return self::SUCCESS;
+    /**
+     * Display summary of bulk email sending
+     *
+     * @param  Collection<EmailResponse>  $responses
+     */
+    private function displayBulkEmailSummary(Collection $responses, Collection $failedEmails): void
+    {
+        $this->info(sprintf(
+            'Bulk email summary: %d sent, %d failed',
+            $responses->count(),
+            $failedEmails->count()
+        ));
+
+        if ($responses->isNotEmpty()) {
+            $this->table(
+                ['Email ID', 'Status', 'Message'],
+                $responses->map(fn (EmailResponse $response) => [
+                    $response->id ?? 'N/A',
+                    'Success',
+                    'Email queued for delivery',
+                ])->toArray()
+            );
+        }
+
+        if ($failedEmails->isNotEmpty()) {
+            $this->error('Failed Emails:');
+            $this->table(
+                ['Index', 'Reason'],
+                $failedEmails->map(fn ($email, $index) => [
+                    $index + 1,
+                    $email ? 'Invalid email data' : 'Collection error',
+                ])->toArray()
+            );
+        }
     }
 
     /**
@@ -332,7 +457,7 @@ class Email extends Command
             ->submit();
 
         $formData = array_filter($formData);
-        
+
         return new EmailData(
             ...$formData
         );
