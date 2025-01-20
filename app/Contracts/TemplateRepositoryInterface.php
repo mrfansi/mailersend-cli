@@ -39,7 +39,6 @@ interface TemplateRepositoryInterface
      */
     public function find(string $id): TemplateResponse;
 
-
     /**
      * Delete sender
      *

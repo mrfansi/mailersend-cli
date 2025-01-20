@@ -15,6 +15,7 @@ namespace App\Commands\Traits;
 
 use App\Data\DomainResponse;
 use App\Data\SenderResponse;
+use App\Data\SmtpUserResponse;
 use App\Data\TemplateResponse;
 use App\Data\TokenResponse;
 use Illuminate\Support\Collection;
@@ -62,6 +63,11 @@ trait HasHelpers
         }
 
         return $id;
+    }
+
+    private function setDomainID(): void
+    {
+        $this->domainId = $this->getDomainID();
     }
 
     /**
@@ -176,6 +182,45 @@ trait HasHelpers
 
         if (! $id) {
             throw new RuntimeException('Template not found');
+        }
+
+        return $id;
+    }
+
+    /**
+     * Get smtp-user ID from option or search
+     *
+     * @throws RuntimeException When smtpUser ID cannot be found
+     */
+    private function getSmtpUserID(): string
+    {
+        /** @var Collection<SmtpUserResponse> $smtpUsers */
+        $smtpUsers = spin(
+            fn () => $this->mailersend->smtpUser($this->domainId)->all(),
+            'Fetching smtp users...'
+        );
+
+        if ($id = $this->option('id')) {
+            $smtpUser = $smtpUsers->firstWhere('id', $id);
+            if ($smtpUser) {
+                return $smtpUser->id;
+            }
+        }
+
+        $id = search(
+            'Search smtp user by name',
+            fn (string $value) => strlen($value) > 0
+                ? $smtpUsers->filter(
+                    fn (SmtpUserResponse $smtpUser) => str_contains(
+                        strtolower($smtpUser->name),
+                        strtolower($value)
+                    )
+                )->pluck('name', 'id')->toArray()
+                : []
+        );
+
+        if (! $id) {
+            throw new RuntimeException('Smtp user not found');
         }
 
         return $id;

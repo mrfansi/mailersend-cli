@@ -13,52 +13,52 @@
 
 namespace App\Contracts;
 
-use App\Data\SmtpData;
-use App\Data\SmtpResponse;
+use App\Data\SmtpUserData;
+use App\Data\SmtpUserResponse;
 use Illuminate\Support\Collection;
 
 /**
- * Interface for Smtp Repository
+ * Interface for SmtpUser Repository
  *
  * This interface defines the contract for interacting with Mailersend SmtpUsers.
  */
-interface SmtpRepositoryInterface
+interface SmtpUserRepositoryInterface
 {
     /**
      * Get all senders with pagination
      *
      * @param  int  $limit  Items per page
      * @param  int  $page  Pagination offset
-     * @return Collection<SmtpResponse>
+     * @return Collection<SmtpUserResponse>
      */
     public function all(int $limit = 10, int $page = 1): Collection;
 
     /**
      * Find sender by ID
      *
-     * @param  string  $id  Smtp ID
+     * @param  string  $id  SmtpUser ID
      */
-    public function find(string $id): SmtpResponse;
+    public function find(string $id): SmtpUserResponse;
 
     /**
      * Create new sender
      *
-     * @param  SmtpData  $data  Smtp data
+     * @param  SmtpUserData  $data  SmtpUser data
      */
-    public function create(SmtpData $data): SmtpResponse;
+    public function create(SmtpUserData $data): SmtpUserResponse;
 
     /**
      * Update sender
      *
-     * @param  string  $id  Smtp ID
-     * @param  SmtpData  $data  Smtp data
+     * @param  string  $id  SmtpUser ID
+     * @param  SmtpUserData  $data  SmtpUser data
      */
-    public function update(string $id, SmtpData $data): SmtpResponse;
+    public function update(string $id, SmtpUserData $data): SmtpUserResponse;
 
     /**
      * Delete sender
      *
-     * @param  string  $id  Smtp ID
+     * @param  string  $id  SmtpUser ID
      */
     public function delete(string $id): bool;
 }

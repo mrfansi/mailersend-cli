@@ -18,10 +18,12 @@ use App\Contracts\MailersendFactoryInterface;
 use App\Mailersend\Domain;
 use App\Mailersend\Email;
 use App\Mailersend\Sender;
+use App\Mailersend\SmtpUser;
 use App\Mailersend\Template;
 use App\Mailersend\Token;
 use App\Services\DomainCacheService;
 use App\Services\SenderCacheService;
+use App\Services\SmtpUserCacheService;
 use App\Services\TemplateCacheService;
 use App\Services\TokenCacheService;
 use Illuminate\Contracts\Cache\Repository as CacheInterface;
@@ -67,6 +69,11 @@ class Mailersend implements HttpClientFactory, MailersendFactoryInterface
      * Sender template service instance
      */
     private ?TemplateCacheService $templateCache = null;
+
+    /**
+     * Sender template service instance
+     */
+    private ?SmtpUserCacheService $smtpUserCache = null;
 
     /**
      * Constructor for Mailersend factory
@@ -186,6 +193,22 @@ class Mailersend implements HttpClientFactory, MailersendFactoryInterface
     public function email(): Email
     {
         return new Email($this->getClient());
+    }
+
+    /**
+     * Creates and returns a new SmtpUser API instance
+     *
+     * @return SmtpUser A configured SmtpUser instance for making API requests
+     *
+     * @throws RuntimeException If dependencies cannot be resolved
+     */
+    public function smtpUser(string $domain_id): SmtpUser
+    {
+        if ($this->smtpUserCache === null) {
+            $this->smtpUserCache = new SmtpUserCacheService($this->cache);
+        }
+
+        return new SmtpUser($this->getClient(), $this->smtpUserCache, $domain_id);
     }
 
     /**

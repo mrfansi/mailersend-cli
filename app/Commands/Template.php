@@ -165,7 +165,7 @@ class Template extends Command implements TemplateCommandInterface
             Str::upper('id') => $template->id,
             Str::headline('name') => $template->name,
             Str::headline('type') => $template->type,
-//            Str::headline('image_path') => $template->image_path,
+            //            Str::headline('image_path') => $template->image_path,
             Str::headline('created_at') => Carbon::parse($template->created_at)->diffForHumans(),
         ]));
 
@@ -176,13 +176,13 @@ class Template extends Command implements TemplateCommandInterface
             Str::headline('rejected') => $template->stats->rejected,
             Str::headline('delivered') => $template->stats->delivered,
             Str::headline('opened') => $template->stats->opened,
-            Str::headline('open_rate') => $template->stats->open_rate . '%',
+            Str::headline('open_rate') => $template->stats->open_rate.'%',
             Str::headline('clicked') => $template->stats->clicked,
-            Str::headline('click_rate') => $template->stats->click_rate . '%',
+            Str::headline('click_rate') => $template->stats->click_rate.'%',
             Str::headline('unsubscribed') => $template->stats->unsubscribed,
-            Str::headline('unsubscribe_rate') => $template->stats->unsubscribe_rate . '%',
+            Str::headline('unsubscribe_rate') => $template->stats->unsubscribe_rate.'%',
             Str::headline('complained') => $template->stats->complained,
-            Str::headline('complain_rate') => $template->stats->complain_rate . '%',
+            Str::headline('complain_rate') => $template->stats->complain_rate.'%',
             Str::headline('last_email_sent_at') => isset($template->stats->last_email_sent_at) ? Carbon::parse($template->stats->last_email_sent_at)->diffForHumans() : 'None',
         ]));
 

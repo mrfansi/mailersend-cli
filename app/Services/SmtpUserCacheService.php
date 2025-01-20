@@ -13,17 +13,17 @@
 
 namespace App\Services;
 
-use App\Data\SmtpResponse;
+use App\Data\SmtpUserResponse;
 use Illuminate\Contracts\Cache\Repository as CacheInterface;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\InvalidArgumentException;
 
 /**
- * Smtp Cache Service
+ * SmtpUser Cache Service
  *
  * This service handles caching operations for smtp_user data.
  */
-class SmtpCacheService
+class SmtpUserCacheService
 {
     /**
      * Cache duration in seconds (5 minutes)
@@ -54,7 +54,7 @@ class SmtpCacheService
      * Get smtp_users from cache
      *
      * @param  string  $key  Cache key
-     * @return Collection<SmtpResponse>|null
+     * @return Collection<SmtpUserResponse>|null
      *
      * @throws InvalidArgumentException
      */
@@ -67,7 +67,7 @@ class SmtpCacheService
      * Store smtp_users in cache
      *
      * @param  string  $key  Cache key
-     * @param  Collection<SmtpResponse>  $smtp_users  SmtpUsers to cache
+     * @param  Collection<SmtpUserResponse>  $smtp_users  SmtpUsers to cache
      *
      * @throws InvalidArgumentException
      */

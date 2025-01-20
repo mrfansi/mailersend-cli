@@ -16,20 +16,20 @@ readonly class TemplateStatsResponse
      * This constructor initializes a new instance of the TemplateStatsResponse class
      * which represents the statistics data for a template.
      *
-     * @param int $total Total number of emails
-     * @param int $queued Number of queued emails
-     * @param int $sent Number of sent emails
-     * @param int $rejected Number of rejected emails
-     * @param int $delivered Number of delivered emails
-     * @param int|null $opened Number of opened emails
-     * @param string|null $open_rate Number of open rate emails
-     * @param int|null $clicked Number of clicked emails
-     * @param string|null $click_rate Number of click rate emails
-     * @param int|null $unsubscribed Number of unsubscribed emails
-     * @param string|null $unsubscribe_rate Number of unsubscribe rate emails
-     * @param int|null $complained Number of complained emails
-     * @param string|null $complain_rate Number of complain rate emails
-     * @param string|null $last_email_sent_at Timestamp of the last sent email
+     * @param  int  $total  Total number of emails
+     * @param  int  $queued  Number of queued emails
+     * @param  int  $sent  Number of sent emails
+     * @param  int  $rejected  Number of rejected emails
+     * @param  int  $delivered  Number of delivered emails
+     * @param  int|null  $opened  Number of opened emails
+     * @param  string|null  $open_rate  Number of open rate emails
+     * @param  int|null  $clicked  Number of clicked emails
+     * @param  string|null  $click_rate  Number of click rate emails
+     * @param  int|null  $unsubscribed  Number of unsubscribed emails
+     * @param  string|null  $unsubscribe_rate  Number of unsubscribe rate emails
+     * @param  int|null  $complained  Number of complained emails
+     * @param  string|null  $complain_rate  Number of complain rate emails
+     * @param  string|null  $last_email_sent_at  Timestamp of the last sent email
      */
     public function __construct(
         public int $total,

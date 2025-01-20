@@ -16,6 +16,7 @@ namespace App\Contracts;
 use App\Mailersend\Domain;
 use App\Mailersend\Email;
 use App\Mailersend\Sender;
+use App\Mailersend\SmtpUser;
 use App\Mailersend\Template;
 use App\Mailersend\Token;
 use Illuminate\Contracts\Cache\Repository as CacheInterface;
@@ -61,6 +62,14 @@ interface MailersendFactoryInterface
      * @return Template A configured Template instance for making API requests
      */
     public function template(): Template;
+
+    /**
+     * Creates and returns a new SMTP User API instance
+     *
+     * @param  string  $domain_id  Domain ID for the SMTP user
+     * @return SmtpUser A configured SMTP User instance for making API requests
+     */
+    public function smtpUser(string $domain_id): SmtpUser;
 
     /**
      * Creates a new instance of the Mailersend factory

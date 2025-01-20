@@ -17,10 +17,12 @@ use App\Contracts\MailersendFactoryInterface;
 use App\Mailersend\Domain;
 use App\Mailersend\Email;
 use App\Mailersend\Sender;
+use App\Mailersend\SmtpUser;
 use App\Mailersend\Template;
 use App\Mailersend\Token;
 use App\Services\DomainCacheService;
 use App\Services\SenderCacheService;
+use App\Services\SmtpUserCacheService;
 use App\Services\TemplateCacheService;
 use App\Services\TokenCacheService;
 use Illuminate\Contracts\Cache\Repository as CacheInterface;
@@ -107,7 +109,7 @@ class MailersendFactory implements MailersendFactoryInterface
     }
 
     /**
-     * Create a new Token API instance
+     * Create a new Email API instance
      *
      * @throws InvalidArgumentException When required configuration is missing
      */
@@ -117,6 +119,20 @@ class MailersendFactory implements MailersendFactoryInterface
 
         return new Email(
             $client,
+        );
+    }
+
+    /**
+     * Create a new SMTP User API instance
+     */
+    public function smtpUser(string $domain_id): SmtpUser
+    {
+        $client = $this->createClient();
+
+        return new SmtpUser(
+            $client,
+            new SmtpUserCacheService($this->cache),
+            $domain_id
         );
     }
 
