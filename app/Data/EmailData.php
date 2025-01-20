@@ -27,8 +27,8 @@ readonly class EmailData
      * This constructor initializes a new instance of the EmailData class,
      * which represents all the data needed to send an email.
      *
-     * @param  EmailAddressData[]  $to  List of recipients (max 50)
      * @param  EmailAddressData|null  $from  Sender information (required if no template_id with default sender)
+     * @param  EmailAddressData[]  $to  List of recipients (max 50)
      * @param  EmailAddressData[]|null  $cc  List of CC recipients (max 10)
      * @param  EmailAddressData[]|null  $bcc  List of BCC recipients (max 10)
      * @param  EmailAddressData|null  $reply_to  Reply-to information
@@ -47,8 +47,9 @@ readonly class EmailData
      * @param  EmailHeaderData[]|null  $headers  Custom headers (Professional and Enterprise only)
      */
     public function __construct(
+        public ?EmailAddressData $from,
+        /** @var EmailAddressData[] */
         public array $to,
-        public ?EmailAddressData $from = null,
         public ?array $cc = null,
         public ?array $bcc = null,
         public ?EmailAddressData $reply_to = null,

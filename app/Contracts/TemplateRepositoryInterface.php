@@ -13,52 +13,37 @@
 
 namespace App\Contracts;
 
-use App\Data\DomainData;
-use App\Data\DomainResponse;
+use App\Data\TemplateResponse;
 use Illuminate\Support\Collection;
 
 /**
- * Interface for Domain Repository
+ * Interface for Template Repository
  *
- * This interface defines the contract for interacting with Mailersend Domains.
+ * This interface defines the contract for interacting with Mailersend Templates.
  */
-interface DomainRepositoryInterface
+interface TemplateRepositoryInterface
 {
     /**
      * Get all senders with pagination
      *
      * @param  int  $limit  Items per page
      * @param  int  $page  Pagination offset
-     * @return Collection<DomainResponse>
+     * @return Collection<TemplateResponse>
      */
     public function all(int $limit = 10, int $page = 1): Collection;
 
     /**
      * Find sender by ID
      *
-     * @param  string  $id  Domain ID
+     * @param  string  $id  Template ID
      */
-    public function find(string $id): DomainResponse;
+    public function find(string $id): TemplateResponse;
 
-    /**
-     * Create new sender
-     *
-     * @param  DomainData  $data  Domain data
-     */
-    public function create(DomainData $data): DomainResponse;
-
-    /**
-     * Update sender
-     *
-     * @param  string  $id  Domain ID
-     * @param  DomainData  $data  Domain data
-     */
-    public function update(string $id, DomainData $data): DomainResponse;
 
     /**
      * Delete sender
      *
-     * @param  string  $id  Domain ID
+     * @param  string  $id  Template ID
      */
     public function delete(string $id): bool;
 }

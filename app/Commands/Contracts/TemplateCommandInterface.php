@@ -13,7 +13,7 @@
 
 namespace App\Commands\Contracts;
 
-interface CommandInterface
+interface TemplateCommandInterface
 {
     /**
      * List all items related to this command
@@ -24,16 +24,6 @@ interface CommandInterface
      * Show the details of the selected item
      */
     public function show(): void;
-
-    /**
-     * Create a new item
-     */
-    public function new(): void;
-
-    /**
-     * Edit the selected item
-     */
-    public function edit(): void;
 
     /**
      * Delete the selected item

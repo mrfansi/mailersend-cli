@@ -18,9 +18,11 @@ use App\Contracts\MailersendFactoryInterface;
 use App\Mailersend\Domain;
 use App\Mailersend\Email;
 use App\Mailersend\Sender;
+use App\Mailersend\Template;
 use App\Mailersend\Token;
 use App\Services\DomainCacheService;
 use App\Services\SenderCacheService;
+use App\Services\TemplateCacheService;
 use App\Services\TokenCacheService;
 use Illuminate\Contracts\Cache\Repository as CacheInterface;
 use Illuminate\Http\Client\PendingRequest;
@@ -57,9 +59,14 @@ class Mailersend implements HttpClientFactory, MailersendFactoryInterface
     private ?DomainCacheService $domainCache = null;
 
     /**
-     * Sender domain service instance
+     * Sender token service instance
      */
     private ?TokenCacheService $tokenCache = null;
+
+    /**
+     * Sender template service instance
+     */
+    private ?TemplateCacheService $templateCache = null;
 
     /**
      * Constructor for Mailersend factory
@@ -151,6 +158,22 @@ class Mailersend implements HttpClientFactory, MailersendFactoryInterface
         }
 
         return new Token($this->getClient(), $this->tokenCache);
+    }
+
+    /**
+     * Creates and returns a new Template API instance
+     *
+     * @return Template A configured Template instance for making API requests
+     *
+     * @throws RuntimeException If dependencies cannot be resolved
+     */
+    public function template(): Template
+    {
+        if ($this->templateCache === null) {
+            $this->templateCache = new TemplateCacheService($this->cache);
+        }
+
+        return new Template($this->getClient(), $this->templateCache);
     }
 
     /**

@@ -17,9 +17,11 @@ use App\Contracts\MailersendFactoryInterface;
 use App\Mailersend\Domain;
 use App\Mailersend\Email;
 use App\Mailersend\Sender;
+use App\Mailersend\Template;
 use App\Mailersend\Token;
 use App\Services\DomainCacheService;
 use App\Services\SenderCacheService;
+use App\Services\TemplateCacheService;
 use App\Services\TokenCacheService;
 use Illuminate\Contracts\Cache\Repository as CacheInterface;
 use Illuminate\Http\Client\PendingRequest;
@@ -86,6 +88,21 @@ class MailersendFactory implements MailersendFactoryInterface
         return new Token(
             $client,
             new TokenCacheService($this->cache)
+        );
+    }
+
+    /**
+     * Create a new Template API instance
+     *
+     * @throws InvalidArgumentException When required configuration is missing
+     */
+    public function template(): Template
+    {
+        $client = $this->createClient();
+
+        return new Template(
+            $client,
+            new TemplateCacheService($this->cache)
         );
     }
 

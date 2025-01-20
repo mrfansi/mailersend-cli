@@ -15,6 +15,7 @@ namespace App\Commands\Traits;
 
 use App\Data\DomainResponse;
 use App\Data\SenderResponse;
+use App\Data\TemplateResponse;
 use App\Data\TokenResponse;
 use Illuminate\Support\Collection;
 use RuntimeException;
@@ -136,6 +137,45 @@ trait HasHelpers
 
         if (! $id) {
             throw new RuntimeException('Token not found');
+        }
+
+        return $id;
+    }
+
+    /**
+     * Get template ID from option or search
+     *
+     * @throws RuntimeException When template ID cannot be found
+     */
+    private function getTemplateID(): string
+    {
+        /** @var Collection<TemplateResponse> $templates */
+        $templates = spin(
+            fn () => $this->mailersend->template()->all(),
+            'Fetching templates...'
+        );
+
+        if ($id = $this->option('id')) {
+            $template = $templates->firstWhere('id', $id);
+            if ($template) {
+                return $template->id;
+            }
+        }
+
+        $id = search(
+            'Search template by name',
+            fn (string $value) => strlen($value) > 0
+                ? $templates->filter(
+                    fn (TemplateResponse $template) => str_contains(
+                        strtolower($template->name),
+                        strtolower($value)
+                    )
+                )->pluck('name', 'id')->toArray()
+                : []
+        );
+
+        if (! $id) {
+            throw new RuntimeException('Template not found');
         }
 
         return $id;

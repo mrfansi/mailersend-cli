@@ -38,6 +38,23 @@ readonly class EmailAddressData
     }
 
     /**
+     * Create an EmailAddressData instance from an array
+     *
+     * This factory method takes an array containing the email address and optional name,
+     * and returns a new instance of the EmailAddressData class.
+     *
+     * @param  array{email: string, name?: string}  $data  The data array
+     * @return self New EmailAddressData instance
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            email: $data['email'],
+            name: $data['name'] ?? null,
+        );
+    }
+
+    /**
      * Convert the DTO to an array for API requests
      *
      * @return array<string, string|null>

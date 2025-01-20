@@ -21,9 +21,9 @@ use Psr\SimpleCache\InvalidArgumentException;
 /**
  * Domain Cache Service
  *
- * This service handles caching operations for domain data.
+ * This service handles caching operations for template data.
  */
-class DomainCacheService
+class TemplateCacheService
 {
     /**
      * Cache duration in seconds (5 minutes)
@@ -31,9 +31,9 @@ class DomainCacheService
     private const CACHE_TTL = 300;
 
     /**
-     * Cache key prefix for domain data
+     * Cache key prefix for template data
      */
-    private const CACHE_PREFIX = 'mailersend_domains';
+    private const CACHE_PREFIX = 'mailersend_templates';
 
     /**
      * Cache implementation
@@ -51,7 +51,7 @@ class DomainCacheService
     }
 
     /**
-     * Get domains from cache
+     * Get templates from cache
      *
      * @param  string  $key  Cache key
      * @return Collection<DomainResponse>|null
@@ -64,16 +64,16 @@ class DomainCacheService
     }
 
     /**
-     * Store domains in cache
+     * Store templates in cache
      *
      * @param  string  $key  Cache key
-     * @param  Collection<DomainResponse>  $domains  Domains to cache
+     * @param  Collection<DomainResponse>  $templates  Domains to cache
      *
      * @throws InvalidArgumentException
      */
-    public function put(string $key, Collection $domains): bool
+    public function put(string $key, Collection $templates): bool
     {
-        return $this->cache->set($key, $domains, self::CACHE_TTL);
+        return $this->cache->set($key, $templates, self::CACHE_TTL);
     }
 
     /**
@@ -89,7 +89,7 @@ class DomainCacheService
     }
 
     /**
-     * Generate cache key for domain list
+     * Generate cache key for template list
      *
      * @param  int  $limit  Number of items per page
      * @param  int  $page  Pagination offset

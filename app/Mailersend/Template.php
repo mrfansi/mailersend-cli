@@ -13,10 +13,9 @@
 
 namespace App\Mailersend;
 
-use App\Contracts\DomainRepositoryInterface;
-use App\Data\DomainData;
-use App\Data\DomainResponse;
-use App\Services\DomainCacheService;
+use App\Contracts\TemplateRepositoryInterface;
+use App\Data\TemplateResponse;
+use App\Services\TemplateCacheService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Collection;
@@ -26,15 +25,15 @@ use RuntimeException;
 use Throwable;
 
 /**
- * Domain API Client
+ * Template API Client
  *
- * This class handles all domain-related operations with the Mailersend API.
- * It implements the DomainRepositoryInterface for standardized domain operations.
+ * This class handles all template-related operations with the Mailersend API.
+ * It implements the TemplateRepositoryInterface for standardized template operations.
  */
-class Domain implements DomainRepositoryInterface
+class Template implements TemplateRepositoryInterface
 {
     /**
-     * Maximum number of domains that can be retrieved
+     * Maximum number of templates that can be retrieved
      */
     private const MAX_COUNT = 100;
 
@@ -44,38 +43,38 @@ class Domain implements DomainRepositoryInterface
     private PendingRequest $client;
 
     /**
-     * Cache service for domain data
+     * Cache service for template data
      */
-    private DomainCacheService $cacheService;
+    private TemplateCacheService $cacheService;
 
     /**
-     * The current domain data
+     * The current template data
      *
-     * This property holds the current domain data obtained from the cache or the
-     * API. It is an array of DomainResponse objects.
+     * This property holds the current template data obtained from the cache or the
+     * API. It is an array of TemplateResponse objects.
      *
-     * @var array<int, DomainResponse>
+     * @var array<int, TemplateResponse>
      */
     private array $currentData = [];
 
     /**
-     * Constructor for Domain API client
+     * Constructor for Template API client
      *
      * @param  PendingRequest  $client  HTTP client for making API requests
-     * @param  DomainCacheService  $cacheService  Cache service for domain data
+     * @param  TemplateCacheService  $cacheService  Cache service for template data
      */
-    public function __construct(PendingRequest $client, DomainCacheService $cacheService)
+    public function __construct(PendingRequest $client, TemplateCacheService $cacheService)
     {
         $this->client = $client;
         $this->cacheService = $cacheService;
     }
 
     /**
-     * Retrieve a list of domains from Mailersend API
+     * Retrieve a list of templates from Mailersend API
      *
-     * @param  int  $limit  Number of domains to retrieve (1-500)
+     * @param  int  $limit  Number of templates to retrieve (1-500)
      * @param  int  $page  Pagination page (>= 0)
-     * @return Collection<DomainResponse> Collection of domain objects
+     * @return Collection<TemplateResponse> Collection of template objects
      *
      * @throws InvalidArgumentException When input parameters are invalid
      * @throws ConnectionException When API connection fails
@@ -92,38 +91,39 @@ class Domain implements DomainRepositoryInterface
                 return $this->cacheService->get($cacheKey);
             }
 
-            $response = $this->client->get('/domains', [
+            $response = $this->client->get('/templates', [
                 'limit' => $limit,
                 'page' => $page,
             ]);
 
             if (! $response->successful()) {
                 throw new RuntimeException(
-                    sprintf('Failed to retrieve domains: %s', $response->body())
+                    sprintf('Failed to retrieve templates: %s', $response->body())
                 );
             }
 
             $hasMore = (bool) $response->json('links')['next'] ?? false;
 
             $data = $response->json('data');
+
             $this->currentData = array_merge($this->currentData, $data);
 
             $totalData = count($this->currentData);
 
-            Log::info("Successfully retrieved domain, page: $page, limit: $limit, data: {$totalData}");
+            Log::info("Successfully retrieved template, page: $page, limit: $limit, data: $totalData");
 
             if ($hasMore) {
                 return $this->all($limit, $page + 1);
             }
 
-            $domains = collect($response->json('data'))
-                ->map(fn (array $domain) => DomainResponse::fromArray($domain));
+            $templates = collect($response->json('data'))
+                ->map(fn (array $template) => TemplateResponse::fromArray($template));
 
-            $this->cacheService->put($cacheKey, $domains);
+            $this->cacheService->put($cacheKey, $templates);
 
-            return $domains;
+            return $templates;
         } catch (Throwable $e) {
-            Log::error('Failed to retrieve domains', [
+            Log::error('Failed to retrieve templates', [
                 'limit' => $limit,
                 'page' => $page,
                 'error' => $e->getMessage(),
@@ -133,32 +133,32 @@ class Domain implements DomainRepositoryInterface
     }
 
     /**
-     * Retrieve domain details by ID
+     * Retrieve template details by ID
      *
-     * @param  string  $id  Domain ID to retrieve
-     * @return DomainResponse Domain details
+     * @param  string  $id  Template ID to retrieve
+     * @return TemplateResponse Template details
      *
-     * @throws InvalidArgumentException When domain ID is invalid
+     * @throws InvalidArgumentException When template ID is invalid
      * @throws ConnectionException When API connection fails
      * @throws RuntimeException When API response is not successful
      * @throws Throwable
      */
-    public function find(string $id): DomainResponse
+    public function find(string $id): TemplateResponse
     {
         $this->validateId($id);
 
         try {
-            $response = $this->client->get("/domains/$id");
+            $response = $this->client->get("/templates/$id");
 
             if (! $response->successful()) {
                 throw new RuntimeException(
-                    sprintf('Failed to retrieve domains: %s', $response->json('message'))
+                    sprintf('Failed to retrieve templates: %s', $response->json('message'))
                 );
             }
 
-            return DomainResponse::fromArray($response->json('data'));
+            return TemplateResponse::fromArray($response->json('data'));
         } catch (Throwable $e) {
-            Log::error('Failed to find domain', [
+            Log::error('Failed to find template', [
                 'verified' => $id,
                 'error' => $e->getMessage(),
             ]);
@@ -167,79 +167,12 @@ class Domain implements DomainRepositoryInterface
     }
 
     /**
-     * Create new domain
+     * Delete template
      *
-     * @param  DomainData  $data  Domain data
-     * @return DomainResponse Created domain details
-     *
-     * @throws ConnectionException When API connection fails
-     * @throws RuntimeException When API response is not successful
-     * @throws Throwable
-     */
-    public function create(DomainData $data): DomainResponse
-    {
-        try {
-            $response = $this->client->post('/domains', $data->toArray());
-
-            if (! $response->successful()) {
-                throw new RuntimeException(
-                    sprintf('Failed to create domain: %s', $response->body())
-                );
-            }
-
-            return DomainResponse::fromArray($response->json());
-        } catch (Throwable $e) {
-            Log::error('Failed to create domain', [
-                'data' => $data->toArray(),
-                'error' => $e->getMessage(),
-            ]);
-            throw $this->handleException($e);
-        }
-    }
-
-    /**
-     * Update domain
-     *
-     * @param  string  $id  Domain ID to update
-     * @param  DomainData  $data  Domain data
-     * @return DomainResponse Updated domain details
-     *
-     * @throws InvalidArgumentException When domain ID is invalid
-     * @throws ConnectionException When API connection fails
-     * @throws RuntimeException When API response is not successful
-     * @throws Throwable
-     */
-    public function update(string $id, DomainData $data): DomainResponse
-    {
-        $this->validateId($id);
-
-        try {
-            $response = $this->client->put("/domains/$id", $data->toArray());
-
-            if (! $response->successful()) {
-                throw new RuntimeException(
-                    sprintf('Failed to update domain: %s', $response->body())
-                );
-            }
-
-            return DomainResponse::fromArray($response->json());
-        } catch (Throwable $e) {
-            Log::error('Failed to update domain', [
-                'verified' => $id,
-                'data' => $data->toArray(),
-                'error' => $e->getMessage(),
-            ]);
-            throw $this->handleException($e);
-        }
-    }
-
-    /**
-     * Delete domain
-     *
-     * @param  string  $id  Domain ID to delete
+     * @param  string  $id  Template ID to delete
      * @return bool True if deletion was successful
      *
-     * @throws InvalidArgumentException When domain ID is invalid
+     * @throws InvalidArgumentException When template ID is invalid
      * @throws ConnectionException When API connection fails
      * @throws Throwable
      */
@@ -248,11 +181,11 @@ class Domain implements DomainRepositoryInterface
         $this->validateId($id);
 
         try {
-            $response = $this->client->delete("/domains/$id");
+            $response = $this->client->delete("/templates/$id");
 
             return $response->successful();
         } catch (Throwable $e) {
-            Log::error('Failed to delete domain', [
+            Log::error('Failed to delete template', [
                 'verified' => $id,
                 'error' => $e->getMessage(),
             ]);
@@ -284,33 +217,16 @@ class Domain implements DomainRepositoryInterface
     }
 
     /**
-     * Validate domain ID
+     * Validate template ID
      *
-     * @param  string  $id  Domain ID
+     * @param  string  $id  Template ID
      *
      * @throws InvalidArgumentException When ID is invalid
      */
     private function validateId(string $id): void
     {
         if (! $id) {
-            throw new InvalidArgumentException('Domain ID cant be null');
-        }
-    }
-
-    /**
-     * Validate domain Email
-     *
-     * @param  string  $email  Domain Email
-     *
-     * @throws InvalidArgumentException When Email is invalid
-     */
-    private function validateEmail(string $email): void
-    {
-        // Validate email address
-        if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidArgumentException(
-                sprintf('Domain Email must be a valid email address, given: %s', $email)
-            );
+            throw new InvalidArgumentException('Template ID cant be null');
         }
     }
 
