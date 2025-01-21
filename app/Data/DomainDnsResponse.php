@@ -2,6 +2,8 @@
 
 namespace App\Data;
 
+use Illuminate\Support\Collection;
+
 /**
  * Domain DNS Response Data Transfer Object
  *
@@ -89,5 +91,46 @@ readonly class DomainDnsResponse
             'custom_tracking' => $this->custom_tracking->toArray(),
             'inbound_routing' => $this->inbound_routing->toArray(),
         ];
+    }
+
+    public function toTable(): Collection
+    {
+        return collect([
+            [
+                'record' => 'spf',
+                'hostname' => $this->spf->hostname,
+                'type' => $this->spf->type,
+                'value' => $this->spf->value,
+                'priority' => $this->spf->priority,
+            ],
+            [
+                'record' => 'dkim',
+                'hostname' => $this->dkim->hostname,
+                'type' => $this->dkim->type,
+                'value' => $this->dkim->value,
+                'priority' => $this->dkim->priority,
+            ],
+            [
+                'record' => 'return_path',
+                'hostname' => $this->spf->hostname,
+                'type' => $this->spf->type,
+                'value' => $this->spf->value,
+                'priority' => $this->spf->priority,
+            ],
+            [
+                'record' => 'custom_tracking',
+                'hostname' => $this->custom_tracking->hostname,
+                'type' => $this->custom_tracking->type,
+                'value' => $this->custom_tracking->value,
+                'priority' => $this->custom_tracking->priority,
+            ],
+            [
+                'record' => 'inbound_routing',
+                'hostname' => $this->inbound_routing->hostname,
+                'type' => $this->inbound_routing->type,
+                'value' => $this->inbound_routing->value,
+                'priority' => $this->inbound_routing->priority,
+            ],
+        ]);
     }
 }

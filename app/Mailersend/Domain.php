@@ -15,6 +15,7 @@ namespace App\Mailersend;
 
 use App\Contracts\DomainRepositoryInterface;
 use App\Data\DomainData;
+use App\Data\DomainDnsResponse;
 use App\Data\DomainResponse;
 use App\Services\DomainCacheService;
 use Illuminate\Http\Client\ConnectionException;
@@ -142,6 +143,8 @@ class Domain implements DomainRepositoryInterface
      * @throws ConnectionException When API connection fails
      * @throws RuntimeException When API response is not successful
      * @throws Throwable
+     *
+     * @see https://developers.mailersend.com/api/v1/domains.html#get-domain
      */
     public function find(string $id): DomainResponse
     {
@@ -156,7 +159,44 @@ class Domain implements DomainRepositoryInterface
                 );
             }
 
+            // Return the domain data as a DomainResponse object
             return DomainResponse::fromArray($response->json('data'));
+        } catch (Throwable $e) {
+            Log::error('Failed to find domain', [
+                'verified' => $id,
+                'error' => $e->getMessage(),
+            ]);
+            throw $this->handleException($e);
+        }
+    }
+
+    /**
+     * Retrieve domain DNS record by ID
+     *
+     * @param  string  $id  Domain ID to retrieve DNS record
+     * @return DomainDnsResponse DNS record details
+     *
+     * @throws InvalidArgumentException When domain ID is invalid
+     * @throws ConnectionException When API connection fails
+     * @throws RuntimeException When API response is not successful
+     * @throws Throwable
+     *
+     * @see https://developers.mailersend.com/api/v1/domains-dns-records.html#get-domain-dns-records
+     */
+    public function findDnsRecord(string $id): DomainDnsResponse
+    {
+        $this->validateId($id);
+
+        try {
+            $response = $this->client->get("/domains/$id/dns-records");
+
+            if (! $response->successful()) {
+                throw new RuntimeException(
+                    sprintf('Failed to retrieve dns record: %s', $response->json('message'))
+                );
+            }
+
+            return DomainDnsResponse::fromArray($response->json('data'));
         } catch (Throwable $e) {
             Log::error('Failed to find domain', [
                 'verified' => $id,

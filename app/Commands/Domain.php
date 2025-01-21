@@ -18,6 +18,7 @@ use App\Commands\Traits\HasHandle;
 use App\Commands\Traits\HasHelpers;
 use App\Contracts\MailersendFactoryInterface;
 use App\Data\DomainData;
+use App\Data\DomainDnsResponse;
 use App\Data\DomainResponse;
 use App\Generator;
 use Illuminate\Support\Carbon;
@@ -51,6 +52,7 @@ class Domain extends Command implements CommandInterface
     protected $signature = 'domain
                          {action=list : Action to perform (list/show/new/edit/delete)}
                          {--id= : Domain ID for edit/delete actions}
+                         {--dns-record : Domain DNS record ID for show actions}
                          {--name= : Domain name for new/edit actions}';
 
     /**
@@ -143,6 +145,17 @@ class Domain extends Command implements CommandInterface
         );
 
         $this->displayDetails($domain);
+
+        if ($this->option('dns-record')) {
+
+            /** @var DomainDnsResponse $domain */
+            $domainDns = spin(
+                fn () => $this->mailersend->domain()->findDnsRecord($id),
+                'Fetching domain record details...'
+            );
+
+            $this->displayDnsRecords($domainDns);
+        }
     }
 
     /**
@@ -300,5 +313,13 @@ class Domain extends Command implements CommandInterface
 
         $this->info('Domain Setting:');
         $this->table(...$setting);
+    }
+
+    private function displayDnsRecords(DomainDnsResponse $dns): void
+    {
+        $this->info('DNS Records:');
+        $records = $this->generator->getTable($dns->toTable());
+
+        $this->table(...$records);
     }
 }
