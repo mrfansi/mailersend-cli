@@ -15,6 +15,8 @@ namespace App\Contracts;
 
 use App\Data\DomainData;
 use App\Data\DomainResponse;
+use App\Data\DomainSettingData;
+use App\Data\DomainSettingResponse;
 use Illuminate\Support\Collection;
 
 /**
@@ -51,9 +53,9 @@ interface DomainRepositoryInterface
      * Update sender
      *
      * @param  string  $id  Domain ID
-     * @param  DomainData  $data  Domain data
+     * @param  DomainSettingData  $data  Domain data
      */
-    public function update(string $id, DomainData $data): DomainResponse;
+    public function update(string $id, DomainSettingData $data): DomainSettingResponse;
 
     /**
      * Delete sender

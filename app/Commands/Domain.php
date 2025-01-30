@@ -20,6 +20,7 @@ use App\Contracts\MailersendFactoryInterface;
 use App\Data\DomainData;
 use App\Data\DomainDnsResponse;
 use App\Data\DomainResponse;
+use App\Data\DomainSettingData;
 use App\Generator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -174,7 +175,7 @@ class Domain extends Command implements CommandInterface
             'Fetching domain details...'
         );
 
-        $data = $this->getData($domain);
+        $data = $this->getDataSetting($domain);
 
         /** @var DomainResponse $updatedDomain */
         $updatedDomain = spin(
@@ -261,6 +262,55 @@ class Domain extends Command implements CommandInterface
         $formData = array_filter($formData);
 
         return new DomainData(
+            ...$formData
+        );
+    }
+
+    /**
+     * Get domain data settings from form input
+     */
+    private function getDataSetting(?DomainResponse $current = null): DomainSettingData
+    {
+        // dd($current);
+        $formData = form()
+            ->confirm(
+                label: 'Pause the domain?',
+                default: $current->domain_settings->send_paused ?? ! $current->domain_settings->send_paused,
+                required: true,
+                name: 'send_paused',
+                hint: 'Domain will be paused and emails will not be sent from this domain.',
+            )
+            ->confirm(
+                label: 'Track Click?',
+                default: $current->domain_settings->track_clicks ?? false,
+                name: 'track_clicks',
+                hint: 'Domain will track clicks.',
+            )
+            ->confirm(
+                label: 'Track Opens?',
+                default: $current->domain_settings->track_opens ?? false,
+                name: 'track_opens',
+                hint: 'Domain will track opens.',
+            )
+            ->confirm(
+                label: 'Track Unsubscribe?',
+                default: $current->domain_settings->track_unsubscribe ?? false,
+                name: 'track_unsubscribe',
+                hint: 'Domain will track unsubscribes.',
+            )
+            ->confirm(
+                label: 'Track Content?',
+                default: $current->domain_settings->track_content ?? false,
+                name: 'track_content',
+                hint: 'Domain will track the content',
+            )
+            ->submit();
+
+        $formData = array_filter($formData);
+
+        dd($formData);
+
+        return new DomainSettingData(
             ...$formData
         );
     }

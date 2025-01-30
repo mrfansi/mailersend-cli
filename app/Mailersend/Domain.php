@@ -17,6 +17,8 @@ use App\Contracts\DomainRepositoryInterface;
 use App\Data\DomainData;
 use App\Data\DomainDnsResponse;
 use App\Data\DomainResponse;
+use App\Data\DomainSettingData;
+use App\Data\DomainSettingResponse;
 use App\Services\DomainCacheService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
@@ -241,20 +243,20 @@ class Domain implements DomainRepositoryInterface
      * Update domain
      *
      * @param  string  $id  Domain ID to update
-     * @param  DomainData  $data  Domain data
-     * @return DomainResponse Updated domain details
+     * @param  DomainSettingData  $data  Domain data
+     * @return DomainSettingResponse Updated domain details
      *
      * @throws InvalidArgumentException When domain ID is invalid
      * @throws ConnectionException When API connection fails
      * @throws RuntimeException When API response is not successful
      * @throws Throwable
      */
-    public function update(string $id, DomainData $data): DomainResponse
+    public function update(string $id, DomainSettingData $data): DomainSettingResponse
     {
         $this->validateId($id);
 
         try {
-            $response = $this->client->put("/domains/$id", $data->toArray());
+            $response = $this->client->put("/domains/$id/settings", $data->toArray());
 
             if (! $response->successful()) {
                 throw new RuntimeException(
@@ -262,7 +264,7 @@ class Domain implements DomainRepositoryInterface
                 );
             }
 
-            return DomainResponse::fromArray($response->json());
+            return DomainSettingResponse::fromArray($response->json());
         } catch (Throwable $e) {
             Log::error('Failed to update domain', [
                 'verified' => $id,
